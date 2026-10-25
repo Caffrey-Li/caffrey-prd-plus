@@ -1,0 +1,19 @@
+{
+  "name": "caffrey-prd-plus",
+  "displayName": "caffrey-prd-plus PRD 助手",
+  "version": "0.3.0",
+  "description": "产品经理的 PRD 助手：把零散需求整理成结构完整的中文 PRD，支持新产品总纲、版本迭代、用户故事和测试用例。",
+  "author": {
+    "name": "Caffrey-Li"
+  },
+  "homepage": "https://github.com/Caffrey-Li/caffrey-prd-plus",
+  "repository": "https://github.com/Caffrey-Li/caffrey-prd-plus",
+  "license": "MIT",
+  "keywords": [
+    "prd",
+    "product-manager",
+    "requirements",
+    "skills"
+  ],
+  "skills": "./skills/"
+}
