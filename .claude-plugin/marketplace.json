@@ -1,0 +1,14 @@
+{
+  "name": "caffrey-prd-plus",
+  "description": "caffrey-prd-plus PRD 助手",
+  "owner": {
+    "name": "Caffrey-Li"
+  },
+  "plugins": [
+    {
+      "name": "caffrey-prd-plus",
+      "source": "./",
+      "description": "产品经理的 PRD 助手：生成、迭代、拆解中文 PRD"
+    }
+  ]
+}
