@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>在线预约咨询师 - 原型图 v0.1</title>
+<!-- 示例：按 caffrey-prd-plus 的 prototype.md，根据 example-psych-booking.md 第八章生成 -->
+<style>
+:root{--primary:#2E7D6B;--text:#1F2329;--text-2:#646A73;--text-3:#86909C;--text-4:#A9AEB8;--line:#EEEFF1;--border:#C9CDD4;--bg:#F5F6F7;--card:#FFFFFF;--fill:#F2F3F5;--avatar:#E8EAED}
+*{box-sizing:border-box}
+body{margin:0;background:#E9EBEE;color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.topbar{position:sticky;top:0;z-index:9;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;padding:12px 24px;background:#fff;border-bottom:1px solid var(--line);font-size:13px}
+.topbar .muted{color:var(--text-2)}
+.topbar nav a{color:var(--primary)}
+.topbar label{display:flex;align-items:center;gap:6px;margin-left:auto}
+.canvas{display:flex;flex-wrap:wrap;gap:48px;padding:32px 24px}
+.board{display:flex;flex-direction:column;gap:8px;scroll-margin-top:80px}
+.board-title{font-size:13px;color:var(--text-2)}
+.screen{width:390px;height:844px;display:flex;flex-direction:column;overflow:hidden;position:relative;background:var(--bg);border-radius:20px;box-shadow:0 0 0 1px #D9DCE1}
+.board:target .screen{box-shadow:0 0 0 3px var(--primary)}
+.num{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:16px;height:16px;border-radius:8px;background:#646A73;color:#fff;font-size:10px;font-weight:600;vertical-align:middle;margin-left:4px}
+body.hide-num .num{display:none}
+
+/* 通用组件 */
+.nav{height:56px;flex-shrink:0;background:var(--card);display:flex;align-items:center;justify-content:center;position:relative}
+.nav h1{margin:0;font-size:17px;font-weight:600}
+.nav .back{position:absolute;left:4px;top:6px;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.capsule{position:absolute;right:12px;top:13px;width:87px;height:30px;border:1px solid #E5E6EB;border-radius:15px;display:flex;align-items:center;justify-content:space-around}
+.capsule i{width:1px;height:16px;background:#E5E6EB}
+.tabbar{height:64px;flex-shrink:0;background:var(--card);border-top:1px solid var(--line);display:flex}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:var(--text-3)}
+.tabbar a.on{color:var(--primary);font-weight:600}
+.avatar{flex-shrink:0;border-radius:50%;background:var(--avatar);color:var(--text-2);display:flex;align-items:center;justify-content:center;font-weight:600}
+.btn{height:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.btn-primary{background:var(--primary);color:#fff;font-weight:600}
+.btn-ghost{border:1px solid var(--border);color:var(--text)}
+.footer{flex-shrink:0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px 20px}
+.card{background:var(--card);border-radius:12px}
+.chip{height:32px;padding:0 12px;border:none;border-radius:16px;background:var(--fill);color:var(--text);font-size:13px;display:flex;align-items:center;gap:4px}
+.tag{font-size:11px;line-height:20px;padding:0 8px;border-radius:4px;background:var(--fill);color:#4E5969}
+.price{font-size:16px;font-weight:600;color:var(--primary)}
+.small{font-size:12px;color:var(--text-2)}
+.row{display:flex;align-items:center}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <strong>在线预约咨询师 · 原型图 v0.1</strong>
+  <span class="muted">示例数据，仅供示意 · 主色为示意</span>
+  <nav><a href="#F-01">咨询师列表</a> · <a href="#F-03">选择时段</a> · <a href="#F-04">知情同意</a> · <a href="#F-06">预约详情</a> · <a href="#F-06-cancel">取消弹窗</a></nav>
+  <label><input type="checkbox" id="toggle-num" checked> 显示规则编号</label>
+</header>
+
+<main class="canvas">
+
+<!-- F-01 咨询师列表 -->
+<section class="board" id="F-01">
+  <div class="board-title">咨询师列表（F-01）</div>
+  <div class="screen">
+    <div class="nav">
+      <h1>找咨询师</h1>
+      <div class="capsule" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1F2329"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg><i></i>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F2329" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+    </div>
+    <div class="row" style="background:var(--card);padding:8px 16px 12px;gap:8px;border-bottom:1px solid var(--line)">
+      <button class="chip">擅长方向 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#646A73" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="chip">价格 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#646A73" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="chip">可约日期 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#646A73" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <span class="num">1</span>
+    </div>
+    <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;gap:12px;overflow:hidden">
+      <a href="#F-03" class="card row" style="gap:12px;padding:16px;align-items:flex-start">
+        <div class="avatar" style="width:56px;height:56px;font-size:20px">林</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+          <div><b style="font-size:16px">林静</b> <span class="small">心理咨询师 · 从业 8 年</span><span class="num">2</span></div>
+          <div class="row" style="gap:6px;flex-wrap:wrap"><span class="tag">焦虑</span><span class="tag">情绪管理</span><span class="tag">亲密关系</span></div>
+          <div class="row" style="justify-content:space-between;margin-top:4px"><span class="price">¥300<span class="small" style="font-weight:400"> /50 分钟</span></span><span class="small">最近可约 明天 14:00</span></div>
+        </div>
+      </a>
+      <a href="#F-03" class="card row" style="gap:12px;padding:16px;align-items:flex-start">
+        <div class="avatar" style="width:56px;height:56px;font-size:20px">周</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+          <div><b style="font-size:16px">周远</b> <span class="small">心理咨询师 · 从业 5 年</span></div>
+          <div class="row" style="gap:6px;flex-wrap:wrap"><span class="tag">职场压力</span><span class="tag">睡眠</span></div>
+          <div class="row" style="justify-content:space-between;margin-top:4px"><span class="price">¥260<span class="small" style="font-weight:400"> /50 分钟</span></span><span class="small">最近可约 10月27日 10:00</span></div>
+        </div>
+      </a>
+      <a href="#F-03" class="card row" style="gap:12px;padding:16px;align-items:flex-start">
+        <div class="avatar" style="width:56px;height:56px;font-size:20px">陈</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+          <div><b style="font-size:16px">陈思敏</b> <span class="small">心理咨询师 · 从业 12 年</span></div>
+          <div class="row" style="gap:6px;flex-wrap:wrap"><span class="tag">青少年</span><span class="tag">家庭关系</span><span class="tag">抑郁情绪</span></div>
+          <div class="row" style="justify-content:space-between;margin-top:4px"><span class="price">¥450<span class="small" style="font-weight:400"> /50 分钟</span></span><span class="small">最近可约 10月28日 19:00</span></div>
+        </div>
+      </a>
+      <p style="margin:4px 0 0;text-align:center;font-size:12px;color:var(--text-3)">上滑加载更多</p>
+    </div>
+    <nav class="tabbar">
+      <a href="#F-01"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>首页</a>
+      <a href="#F-01" class="on"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>咨询</a>
+      <a href="#F-06"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>我的</a>
+    </nav>
+  </div>
+</section>
+
+<!-- F-03 选择时段 -->
+<section class="board" id="F-03">
+  <div class="board-title">时段选择与锁定（F-03）</div>
+  <div class="screen">
+    <div class="nav">
+      <a class="back" href="#F-01" aria-label="返回"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F2329" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <h1>选择时段</h1>
+    </div>
+    <div class="row" style="background:var(--card);margin-top:1px;padding:12px 16px;gap:12px">
+      <div class="avatar" style="width:44px;height:44px;font-size:17px">林</div>
+      <div style="flex:1"><div style="font-size:15px;font-weight:600">林静</div><div class="small" style="margin-top:2px">心理咨询师 · 单次 50 分钟</div></div>
+      <span class="price">¥300</span>
+    </div>
+    <div style="background:var(--card);margin-top:8px;padding:16px 0 12px">
+      <div style="margin:0 16px 12px;font-size:15px;font-weight:600">选择日期<span class="num">1</span></div>
+      <div class="row" style="gap:8px;padding:0 16px;overflow:hidden">
+        <button style="flex-shrink:0;width:60px;height:64px;border:none;border-radius:10px;background:var(--fill);font-size:12px;color:var(--text-2)">周日<br><b style="font-size:16px;color:var(--text)">25</b></button>
+        <button style="flex-shrink:0;width:60px;height:64px;border:none;border-radius:10px;background:var(--primary);font-size:12px;color:#fff">周一<br><b style="font-size:16px">26</b></button>
+        <button style="flex-shrink:0;width:60px;height:64px;border:none;border-radius:10px;background:var(--fill);font-size:12px;color:var(--text-2)">周二<br><b style="font-size:16px;color:var(--text)">27</b></button>
+        <button style="flex-shrink:0;width:60px;height:64px;border:none;border-radius:10px;background:var(--fill);font-size:12px;color:var(--text-2)">周三<br><b style="font-size:16px;color:var(--text)">28</b></button>
+        <button style="flex-shrink:0;width:60px;height:64px;border:none;border-radius:10px;background:var(--fill);font-size:12px;color:var(--text-2)">周四<br><b style="font-size:16px;color:var(--text)">29</b></button>
+      </div>
+    </div>
+    <div style="flex:1;background:var(--card);margin-top:8px;padding:16px">
+      <div class="row" style="justify-content:space-between;margin-bottom:12px"><span style="font-size:15px;font-weight:600">可约时段<span class="num">2</span></span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+        <button disabled style="height:44px;border:none;border-radius:8px;background:var(--fill);color:var(--text-4);font-size:14px">09:00</button>
+        <button style="height:44px;border:1px solid #E5E6EB;border-radius:8px;background:#fff;color:var(--text);font-size:14px">10:00</button>
+        <button disabled style="height:44px;border:none;border-radius:8px;background:var(--fill);color:var(--text-4);font-size:14px">11:00</button>
+        <button style="height:44px;border:1.5px solid var(--primary);border-radius:8px;background:#fff;color:var(--primary);font-size:14px;font-weight:600">14:00</button>
+        <button style="height:44px;border:1px solid #E5E6EB;border-radius:8px;background:#fff;color:var(--text);font-size:14px">15:00</button>
+        <button style="height:44px;border:1px solid #E5E6EB;border-radius:8px;background:#fff;color:var(--text);font-size:14px">16:00</button>
+        <button disabled style="height:44px;border:none;border-radius:8px;background:var(--fill);color:var(--text-4);font-size:14px">19:00</button>
+        <button style="height:44px;border:1px solid #E5E6EB;border-radius:8px;background:#fff;color:var(--text);font-size:14px">20:00</button>
+        <button disabled style="height:44px;border:none;border-radius:8px;background:var(--fill);color:var(--text-4);font-size:14px">21:00</button>
+      </div>
+    </div>
+    <div class="footer" style="display:flex;flex-direction:column;gap:10px">
+      <div class="row" style="justify-content:space-between;font-size:13px"><span>已选：10月26日 周一 14:00-14:50</span><span class="small">锁定剩余 <b style="color:var(--text)">14:32</b><span class="num">3</span></span></div>
+      <a class="btn btn-primary" href="#F-04">下一步：填写信息</a>
+    </div>
+  </div>
+</section>
+
+<!-- F-04 知情同意 -->
+<section class="board" id="F-04">
+  <div class="board-title">知情同意签署（F-04）</div>
+  <div class="screen">
+    <div class="nav">
+      <a class="back" href="#F-03" aria-label="返回"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F2329" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <h1>知情同意书</h1>
+    </div>
+    <article class="card" style="flex:1;margin:8px 16px;padding:20px;overflow:hidden;display:flex;flex-direction:column;gap:14px;font-size:14px;line-height:1.75;color:#4E5969">
+      <h2 style="margin:0;font-size:17px;color:var(--text);text-align:center">心理咨询知情同意书<span class="num">1</span></h2>
+      <p style="margin:0;font-size:12px;color:var(--text-3);text-align:center">示例文本，正式内容由法务提供</p>
+      <h3 style="margin:0;font-size:15px;color:var(--text)">一、服务说明</h3>
+      <p style="margin:0">心理咨询是来访者与咨询师共同工作的过程，不提供医学诊断和药物治疗。如需医疗服务，咨询师会建议你前往专业医疗机构。</p>
+      <h3 style="margin:0;font-size:15px;color:var(--text)">二、保密原则</h3>
+      <p style="margin:0">咨询内容将严格保密。在法律规定的例外情形下，咨询师可能需要突破保密原则，具体情形以正式文本为准。</p>
+      <h3 style="margin:0;font-size:15px;color:var(--text)">三、预约、改约与取消</h3>
+      <p style="margin:0">预约成功后如需改约或取消，请在规定时间前操作，退款规则以平台公示为准。</p>
+    </article>
+    <div class="footer" style="display:flex;flex-direction:column;gap:14px">
+      <label class="row" style="gap:8px;font-size:14px"><input type="checkbox" checked style="width:18px;height:18px;margin:0;accent-color:var(--primary)">我已阅读并同意《心理咨询知情同意书》<span class="num">2</span></label>
+      <div class="row" style="gap:12px">
+        <a class="btn btn-ghost" href="#F-01" style="flex:1">不同意</a>
+        <a class="btn btn-primary" href="#F-06" style="flex:2">同意并继续<span class="num">3</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- F-06 预约详情 -->
+<section class="board" id="F-06">
+  <div class="board-title">改约与取消：预约详情（F-06）</div>
+  <div class="screen">
+    <div class="nav" style="background:var(--primary);color:#fff">
+      <a class="back" href="#F-01" aria-label="返回"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <h1>预约详情</h1>
+    </div>
+    <div style="background:var(--primary);color:#fff;padding:8px 20px 60px">
+      <div class="row" style="gap:8px;font-size:22px;font-weight:600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9.5"/></svg>已预约</div>
+    </div>
+    <div style="flex:1;margin-top:-40px;padding:0 16px;display:flex;flex-direction:column;gap:12px">
+      <div class="card row" style="padding:16px;gap:12px">
+        <div class="avatar" style="width:52px;height:52px;font-size:19px">林</div>
+        <div style="flex:1"><div style="font-size:16px;font-weight:600">林静</div><div class="small" style="margin-top:4px">心理咨询师 · 从业 8 年</div></div>
+      </div>
+      <div class="card" style="padding:4px 16px;font-size:14px">
+        <div class="row" style="justify-content:space-between;height:48px;border-bottom:1px solid var(--fill)"><span class="small" style="font-size:14px">咨询时间</span><span>10月26日 周一 14:00-14:50</span></div>
+        <div class="row" style="justify-content:space-between;height:48px"><span class="small" style="font-size:14px">实付金额</span><span>¥300.00</span></div>
+      </div>
+    </div>
+    <div class="footer row" style="gap:12px">
+      <a class="btn btn-ghost" href="#F-06-cancel" style="flex:1">取消预约<span class="num">1</span></a>
+      <a class="btn btn-primary" href="#F-03" style="flex:1">改约<span class="num">2</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- F-06 取消弹窗 -->
+<section class="board" id="F-06-cancel">
+  <div class="board-title">改约与取消：确认取消弹窗（F-06）</div>
+  <div class="screen">
+    <div aria-hidden="true" style="display:flex;flex-direction:column;height:100%">
+      <div style="height:56px;background:var(--primary)"></div>
+      <div style="height:110px;background:var(--primary)"></div>
+      <div class="card" style="margin:-40px 16px 0;height:84px"></div>
+      <div class="card" style="margin:12px 16px 0;height:196px"></div>
+      <div style="flex:1"></div>
+      <div style="height:80px;background:#fff"></div>
+    </div>
+    <div style="position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:0 32px">
+      <div role="dialog" aria-labelledby="dlg-title" style="width:100%;background:#fff;border-radius:16px;overflow:hidden">
+        <div style="padding:24px 24px 20px;display:flex;flex-direction:column;gap:12px;position:relative">
+          <a href="#F-06" aria-label="关闭" style="position:absolute;right:6px;top:6px;width:44px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86909C" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+          <h2 id="dlg-title" style="margin:0;font-size:18px;text-align:center">确认取消预约？</h2>
+          <p style="margin:0;font-size:14px;line-height:1.7;color:#4E5969;text-align:center">取消后该时段将释放给其他来访者。退款比例按取消规则计算（待确认，见 Q-01）。</p>
+          <div class="row" style="justify-content:space-between;margin-top:4px;padding:12px 16px;background:#F7F8FA;border-radius:8px;font-size:14px"><span class="small" style="font-size:14px">预计退款<span class="num">3</span></span><b>¥ 待确认</b></div>
+        </div>
+        <div class="row" style="border-top:1px solid var(--line)">
+          <a href="#F-06" style="flex:1;height:52px;display:flex;align-items:center;justify-content:center;font-size:16px;border-right:1px solid var(--line)">再想想</a>
+          <a href="#F-01" style="flex:1;height:52px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:var(--primary)">确认取消</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<script>
+document.getElementById('toggle-num').addEventListener('change', function (e) {
+  document.body.classList.toggle('hide-num', !e.target.checked);
+});
+</script>
+</body>
+</html>
