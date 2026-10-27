@@ -4,10 +4,11 @@
 meta:
   prd: 咨询师列表增加“只看今天可约” PRD
   prd_version: v1.0
-  generator: caffrey-prd-plus v0.3.0
+  generator: caffrey-prd-plus v0.4.0
   target: 微信小程序
 
 env:                                  # 执行前由用户填写
+  ENV_TYPE: 测试                      # 测试 / 预发 / 生产
   ENTRY: ""                           # 如：微信开发者工具打开项目 xxx，或真机扫码进入
   COUNSELOR_TODAY: ""                 # 今天至少有 1 个可约时段的咨询师姓名
   COUNSELOR_NOT_TODAY: ""             # 今天没有可约时段、其他日期有的咨询师姓名
@@ -36,6 +37,7 @@ cases:
     title: 打开开关后只显示今天可约的咨询师
     type: 正常
     priority: P0
+    prod_safe: true
     pre: [D1]
     setup:
       - open: ${ENTRY}
@@ -52,6 +54,7 @@ cases:
     title: 关闭开关后恢复原筛选结果
     type: 正常
     priority: P0
+    prod_safe: true
     pre: [D1]
     setup:
       - open: ${ENTRY}
@@ -70,6 +73,7 @@ cases:
     title: 与擅长方向筛选组合时同时满足两个条件
     type: 正常
     priority: P1
+    prod_safe: true
     pre: [D1]
     setup:
       - open: ${ENTRY}
@@ -87,6 +91,7 @@ cases:
     title: 打开开关时清空并置灰“可约日期”
     type: 边界
     priority: P1
+    prod_safe: true
     pre: [D1]
     setup:
       - open: ${ENTRY}
@@ -103,6 +108,7 @@ cases:
     title: 今天没有可约咨询师时显示空状态
     type: 边界
     priority: P1
+    prod_safe: true
     pre: [D2]
     setup:
       - open: ${ENTRY}
@@ -120,6 +126,7 @@ cases:
     title: 离开列表再回来，开关恢复为关闭
     type: 正常
     priority: P2
+    prod_safe: true
     pre: [D1]
     setup:
       - open: ${ENTRY}
@@ -137,6 +144,7 @@ cases:
     title: 回归：开关关闭时，原有筛选和加载更多不受影响
     type: 回归
     priority: P1
+    prod_safe: true
     pre: [D1]
     setup:
       - open: ${ENTRY}

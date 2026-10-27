@@ -1,0 +1,10 @@
+# 由 make_bundle.py 生成。导入飞书 Wiki 时按 wiki 的层级和顺序创建节点，说明见 IMPORT.md
+bundle: "bundle-lite-filter"
+wiki:
+  - title: "咨询师列表增加“只看今天可约” PRD"
+    file: "pages/01-咨询师列表增加只看今天可约.md"
+    level: 1
+images:
+  - file: "images/F-01-咨询师列表.png"
+    alt: "F-01 咨询师列表 线框图"
+    used_in: "pages/01-咨询师列表增加只看今天可约.md"

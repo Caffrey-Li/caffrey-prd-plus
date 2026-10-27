@@ -14,6 +14,7 @@ ORDER = [
     "references/prd-template.md",
     "references/section-matrix.md",
     "references/wireframe.md",
+    "references/bundle.md",
     "references/prototype.md",
     "references/field-spec.md",
     "references/new-product-mode.md",

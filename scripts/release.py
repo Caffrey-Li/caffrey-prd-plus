@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION_FILE = ROOT / "skills" / "caffrey-prd-plus" / "VERSION"
+VERSION_FILES = [ROOT / "skills" / name / "VERSION" for name in ("caffrey-prd-plus", "caffrey-test-runner")]
 MANIFESTS = [
     ROOT / ".claude-plugin" / "plugin.json",
     ROOT / ".cursor-plugin" / "plugin.json",
@@ -32,7 +32,8 @@ def main() -> None:
     if f"## v{version}" not in changelog:
         sys.exit(f"CHANGELOG.md 中没有 “## v{version}” 的更新内容，请先补上。")
 
-    VERSION_FILE.write_text(version + "\n", encoding="utf-8")
+    for f in VERSION_FILES:
+        f.write_text(version + "\n", encoding="utf-8")
     for path in MANIFESTS:
         data = json.loads(path.read_text(encoding="utf-8"))
         data["version"] = version

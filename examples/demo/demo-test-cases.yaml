@@ -1,0 +1,157 @@
+# 演示用例：在 lite-filter-demo.html 上试跑 caffrey-test-runner。
+# 用例与 examples/example-test-cases.yaml 相同，只是填好了 env，并把测试数据 D2 的准备写进了 TC-005 的 setup。
+# 使用：把 ENTRY 改成你电脑上演示页面的完整地址，然后对 agent 说“用 caffrey-test-runner 执行这个文件”。
+# 想看失败和缺陷单的效果：在 ENTRY 末尾加上 ?bug=1。
+
+meta:
+  prd: 咨询师列表增加“只看今天可约” PRD
+  prd_version: v1.0
+  generator: caffrey-prd-plus v0.4.0
+  target: Web
+
+env:
+  ENV_TYPE: 测试
+  ENTRY: "file:///请改成你的路径/caffrey-prd-plus/examples/demo/lite-filter-demo.html"
+  COUNSELOR_TODAY: 林静
+  COUNSELOR_NOT_TODAY: 周远
+  TAG_OF_TODAY: 焦虑
+
+data:
+  - id: D1
+    desc: ${COUNSELOR_TODAY} 今天至少有 1 个可约时段；${COUNSELOR_NOT_TODAY} 今天没有可约时段，明天有
+    how: 演示页面的默认数据已满足
+  - id: D2
+    desc: 所有咨询师今天都没有可约时段
+    how: 在演示页面顶部的「演示数据」中选择「今天无可约」（已写进 TC-005 的 setup）
+
+run_rules: |
+  1. 先检查 env 是否已填写、data 是否已准备；缺少时停止，列出缺什么。
+  2. 按 cases 的顺序执行。每条先执行 setup；setup 失败记为“阻塞”，不再执行 steps。
+  3. 按“类型「文案」”中的可见文字定位元素；有 @ 时只在 @ 后的范围内找。
+  4. 逐条检查 expect：全部满足记为“通过”；任何一条不满足记为“失败”，写明实际看到的内容并截图。
+  5. 遇到 note 步骤时暂停请人工完成；无人处理时记为“需人工”。
+  6. 不修改用例和期望结果。每条结束后执行 cleanup，再执行下一条。
+  7. 全部执行完后，按“结果回填格式”输出结果表和统计。
+
+cases:
+  - id: TC-001
+    feature: F-01
+    title: 打开开关后只显示今天可约的咨询师
+    type: 正常
+    priority: P0
+    prod_safe: true
+    pre: [D1]
+    setup:
+      - open: ${ENTRY}
+      - open: 页面「咨询师列表」
+    steps:
+      - toggle: { target: 开关「只看今天可约」, value: 开 }
+    expect:
+      - visible: "卡片「${COUNSELOR_TODAY}」"
+      - hidden: "卡片「${COUNSELOR_NOT_TODAY}」"
+
+  - id: TC-002
+    feature: F-01
+    title: 关闭开关后恢复原筛选结果
+    type: 正常
+    priority: P0
+    prod_safe: true
+    pre: [D1]
+    setup:
+      - open: ${ENTRY}
+      - open: 页面「咨询师列表」
+      - toggle: { target: 开关「只看今天可约」, value: 开 }
+    steps:
+      - toggle: { target: 开关「只看今天可约」, value: 关 }
+    expect:
+      - visible: "卡片「${COUNSELOR_TODAY}」"
+      - visible: "卡片「${COUNSELOR_NOT_TODAY}」"
+      - enabled: 下拉「可约日期」
+
+  - id: TC-003
+    feature: F-01
+    title: 与擅长方向筛选组合时同时满足两个条件
+    type: 正常
+    priority: P1
+    prod_safe: true
+    pre: [D1]
+    setup:
+      - open: ${ENTRY}
+      - open: 页面「咨询师列表」
+    steps:
+      - select: { target: 下拉「擅长方向」, value: "${TAG_OF_TODAY}" }
+      - toggle: { target: 开关「只看今天可约」, value: 开 }
+    expect:
+      - visible: "卡片「${COUNSELOR_TODAY}」"
+      - each: { target: 卡片「咨询师」, contains: "${TAG_OF_TODAY}" }
+
+  - id: TC-004
+    feature: F-01
+    title: 打开开关时清空并置灰“可约日期”
+    type: 边界
+    priority: P1
+    prod_safe: true
+    pre: [D1]
+    setup:
+      - open: ${ENTRY}
+      - open: 页面「咨询师列表」
+    steps:
+      - select: { target: 下拉「可约日期」, value: "明天" }
+      - toggle: { target: 开关「只看今天可约」, value: 开 }
+    expect:
+      - disabled: 下拉「可约日期」
+      - text: { target: 下拉「可约日期」, value: "可约日期" }
+
+  - id: TC-005
+    feature: F-01
+    title: 今天没有可约咨询师时显示空状态
+    type: 边界
+    priority: P1
+    prod_safe: true
+    pre: [D2]
+    setup:
+      - open: ${ENTRY}
+      - click: 单选「今天无可约」@区域「演示数据」
+      - open: 页面「咨询师列表」
+    steps:
+      - toggle: { target: 开关「只看今天可约」, value: 开 }
+    expect:
+      - visible: 文本「今天暂无可约的咨询师」
+      - visible: 按钮「查看全部」
+      - count: { target: 卡片「咨询师」, value: 0 }
+
+  - id: TC-006
+    feature: F-01
+    title: 离开列表再回来，开关恢复为关闭
+    type: 正常
+    priority: P2
+    prod_safe: true
+    pre: [D1]
+    setup:
+      - open: ${ENTRY}
+      - open: 页面「咨询师列表」
+      - toggle: { target: 开关「只看今天可约」, value: 开 }
+    steps:
+      - click: 链接「首页」@区域「底部标签栏」
+      - click: 链接「咨询」@区域「底部标签栏」
+    expect:
+      - page: 咨询师列表
+      - unchecked: 开关「只看今天可约」
+
+  - id: TC-007
+    feature: F-01
+    title: 回归：开关关闭时，原有筛选不受影响
+    type: 回归
+    priority: P1
+    prod_safe: true
+    pre: [D1]
+    setup:
+      - open: ${ENTRY}
+      - open: 页面「咨询师列表」
+    steps:
+      - select: { target: 下拉「擅长方向」, value: "${TAG_OF_TODAY}" }
+      - scroll: { target: 列表「咨询师」, to: 底部 }
+    expect:
+      - unchecked: 开关「只看今天可约」
+      - each: { target: 卡片「咨询师」, contains: "${TAG_OF_TODAY}" }
+      - count: { target: 卡片「咨询师」, min: 1 }

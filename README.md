@@ -4,10 +4,11 @@
 
 ## 能做什么
 
-- **新建 PRD**：输入一句话、会议纪要、截图或旧文档，先确认需求类型、行业和文档版本，再直接出一版草稿，并附上待你确认的问题。
+- **新建 PRD**：输入一句话、会议纪要、截图或旧文档，第一步先让你选文档版本（默认精简版）、要写的板块和交付方式，选好才开始写；只出需求文档，原型图、测试用例等你需要时再出。
 - **新产品模式**：碰到“做一个类似 XX 的产品”这类完整新产品，先出产品总纲（定位、竞品、模块地图、核心对象、MVP 与路线图），再按模块逐个出详细 PRD。
 - **迭代 PRD**：按版本号规则修改已有 PRD，自动记录变更、在正文标记改动、提醒需要重新确认的人。
 - **拆用户故事**：按功能编号拆成“作为……我想要……以便……”的用户故事和验收条件。
+- **执行测试**（技能 `caffrey-test-runner`）：提测后按 YAML 用例逐条执行，截图留证，输出结果表和缺陷单，支持只重跑失败用例、转成 Playwright 脚本做自动化回归。Web 端开箱可用；App、Mac / Windows 应用、小程序附执行指南。
 - **生成测试用例**：PRD 定稿后，按验收标准和字段表生成两份用例：可粘贴到飞书表格的版本，和测试 agent 能直接逐条执行、回填结果的 YAML 版本。
 
 ## 特点
@@ -18,6 +19,7 @@
 - **行业包**：游戏娱乐、风电能源、心理咨询、服务行业、AI 服务，自动补充行业特有的检查项。欢迎贡献更多行业。
 - **线下协作**：干系人分工、系统影响、数据影响、接口与架构、外部依赖、待确认事项六张表。
 - **全局与交互规范**：通用规则写一次，页面说明只写例外。
+- **全包交付**：PRD.md + 线框图图片 + 清单 + 导入说明打成一个压缩包，md 里用图片占位引用，交给 agent 可按原有层级导入飞书 Wiki。
 - **字段与组件说明**：每个页面附字段表，写清类型、必填、长度格式、枚举、默认值、限制与校验、前置条件；共用的字段和枚举统一放在字段字典。
 - **用户路径图**：完整版中每个模块附一张文本路径图，入口、主路径、分支一目了然。
 - **页面线框图**：每个页面附一张黑白灰的文本线框图，以骨架为主，编号与规则逐条对应，直接粘贴进飞书即可。
@@ -27,7 +29,7 @@
 
 ## 安装
 
-推荐一键安装（需要 git），会同时装到 Claude Code、Codex、Cursor、DeepSeek Harness、Grok Build、WorkBuddy：
+仓库包含两个技能：`caffrey-prd-plus`（写 PRD）和 `caffrey-test-runner`（执行测试）。推荐一键安装（需要 git），两个技能会同时装到 Claude Code、Codex、Cursor、DeepSeek Harness、Grok Build、WorkBuddy：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Caffrey-Li/caffrey-prd-plus/main/scripts/install.sh | bash
@@ -38,7 +40,7 @@ curl -fsSL https://raw.githubusercontent.com/Caffrey-Li/caffrey-prd-plus/main/sc
 - **Claude Code**：`/plugin marketplace add Caffrey-Li/caffrey-prd-plus`，再 `/plugin install caffrey-prd-plus@caffrey-prd-plus`
 - **Cursor**：在 Customize 中选择 From GitHub Repository，填入本仓库地址
 - **WorkBuddy**：在【技能管理】中通过 URL 导入，或用一键脚本
-- **Grok Bot、ChatGPT 等聊天工具**：上传 [单文件版](dist/caffrey-prd-plus-prompt.md)
+- **Grok Bot、ChatGPT 等聊天工具**：上传 [单文件版](dist/caffrey-prd-plus-prompt.md)（只含写 PRD；执行测试需要能操作浏览器或电脑的 agent，如 Claude Code + Playwright MCP、Claude in Chrome）
 
 详细步骤见 [docs/install.md](docs/install.md)。
 
@@ -57,6 +59,8 @@ curl -fsSL https://raw.githubusercontent.com/Caffrey-Li/caffrey-prd-plus/main/sc
 - `example-psych-booking.md`：完整版（心理咨询小程序预约），含线框图、字段表和字段字典
 - `example-lite-filter.md`：精简版（咨询师列表加一个筛选开关）
 - `example-test-cases.md`、`example-test-cases.yaml`：上面精简版需求的测试用例（飞书表格 + 可执行 YAML）
+- `bundle-lite-filter/`：精简版需求的全包交付样例（页面、线框图 PNG、manifest、导入说明）
+- `demo/`：可以直接试跑测试技能的演示页面、填好环境的用例、转好的 Playwright 脚本和一份执行结果样例
 - `prototype-psych-booking.html`：同一个需求的原型图样例（用浏览器打开）
 - `example-plane-overview.md`：新产品模式的产品总纲（类似 Plane 的项目协同工具）
 
@@ -81,6 +85,11 @@ skills/caffrey-prd-plus/      技能文件夹（安装这个）
     user-stories.md           用户故事格式
     test-cases.md             测试用例（飞书表格 + 可执行 YAML）
   VERSION                     当前版本号
+skills/caffrey-test-runner/   测试执行技能
+  SKILL.md                    执行流程与铁律
+  references/                 用例格式、Web / App / 桌面 / 小程序执行指南、结果与缺陷单格式、转 Playwright 脚本
+  assets/playwright/          Playwright 配置与辅助函数模板
+  scripts/pw_results.js       Playwright 报告转结果表
 dist/caffrey-prd-plus-prompt.md   单文件版（给不支持 Skill 的工具）
 scripts/install.sh                一键安装 / 更新脚本
 scripts/release.py                发版脚本：同步版本号并生成单文件版

@@ -6,7 +6,6 @@ set -euo pipefail
 
 REPO_URL="${CAFFREY_PRD_REPO:-https://github.com/Caffrey-Li/caffrey-prd-plus.git}"
 HOME_DIR="${CAFFREY_PRD_HOME:-$HOME/.caffrey-prd-plus}"
-NAME="caffrey-prd-plus"
 
 if ! command -v git >/dev/null 2>&1; then
   echo "需要先安装 git：https://git-scm.com/downloads" >&2
@@ -21,8 +20,7 @@ else
   git clone --quiet --depth 1 "$REPO_URL" "$HOME_DIR"
 fi
 
-SRC="$HOME_DIR/skills/$NAME"
-VERSION="$(cat "$SRC/VERSION")"
+VERSION="$(cat "$HOME_DIR/skills/caffrey-prd-plus/VERSION")"
 
 # ~/.agents/skills 同时被 Codex、Cursor、DeepSeek Harness 读取
 targets=("$HOME/.agents/skills")
@@ -30,13 +28,17 @@ targets=("$HOME/.agents/skills")
 [ -d "$HOME/.grok" ] && targets+=("$HOME/.grok/skills")
 [ -d "$HOME/.workbuddy" ] && targets+=("$HOME/.workbuddy/skills")
 
-for dir in "${targets[@]}"; do
-  dest="$dir/$NAME"
-  mkdir -p "$dir"
-  rm -rf "$dest"
-  cp -R "$SRC" "$dest"
-  echo "script" > "$dest/.install-method"
-  echo "已安装到：$dest"
+# 安装仓库中的全部技能：caffrey-prd-plus（写 PRD）、caffrey-test-runner（执行测试）
+for SRC in "$HOME_DIR"/skills/*/; do
+  NAME="$(basename "$SRC")"
+  for dir in "${targets[@]}"; do
+    dest="$dir/$NAME"
+    mkdir -p "$dir"
+    rm -rf "$dest"
+    cp -R "$SRC" "$dest"
+    echo "script" > "$dest/.install-method"
+    echo "已安装到：$dest"
+  done
 done
 
-echo "caffrey-prd-plus v$VERSION 安装完成。请新开一个对话让新版本生效。"
+echo "caffrey-prd-plus v$VERSION 安装完成（含 caffrey-test-runner）。请新开一个对话让新版本生效。"

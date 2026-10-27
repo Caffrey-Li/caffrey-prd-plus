@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>演示：咨询师列表（只看今天可约）</title>
+<!--
+  caffrey-test-runner 演示页面：实现了 examples/example-lite-filter.md 中的需求，
+  用来试跑 demo-test-cases.yaml。纯前端、无网络请求，数据都是演示数据。
+  地址参数：?bug=1 模拟一个缺陷（打开开关时“可约日期”不置灰）；?data=empty 今天没有可约咨询师。
+-->
+<style>
+:root{--primary:#2E7D6B;--text:#1F2329;--text-2:#646A73;--text-3:#86909C;--line:#EEEFF1;--bg:#F5F6F7;--fill:#F2F3F5}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+body{margin:0;background:#E9EBEE;color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.demo-panel{max-width:390px;margin:16px auto 0;padding:10px 14px;background:#fff;border:1px dashed #C9CDD4;border-radius:8px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.demo-panel h2{margin:0;font-size:13px;color:var(--text-2);width:100%}
+.demo-panel label{display:flex;align-items:center;gap:4px}
+.app{width:390px;min-height:760px;margin:12px auto 24px;background:var(--bg);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 0 1px #D9DCE1}
+.nav{height:56px;background:#fff;display:flex;align-items:center;justify-content:center}
+.nav h1{margin:0;font-size:17px}
+.view{flex:1;display:flex;flex-direction:column}
+.filters{background:#fff;padding:8px 16px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.filters .row{display:flex;gap:8px}
+.filters select{height:32px;border:none;border-radius:16px;background:var(--fill);padding:0 10px;font-size:13px;color:var(--text);font-family:inherit}
+.filters select:disabled{color:#A9AEB8;background:#F7F8FA}
+.switch{display:flex;align-items:center;gap:8px;font-size:14px}
+.switch input{width:40px;height:22px;accent-color:var(--primary)}
+ul.list{list-style:none;margin:0;padding:12px 16px;display:flex;flex-direction:column;gap:12px}
+.card{background:#fff;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.card .name{font-size:16px;font-weight:600}
+.card .sub{font-size:12px;color:var(--text-2)}
+.tags{display:flex;gap:6px}
+.tag{font-size:11px;line-height:20px;padding:0 8px;border-radius:4px;background:var(--fill);color:#4E5969}
+.card .foot{display:flex;justify-content:space-between;font-size:12px;color:var(--text-2)}
+.card .price{font-size:15px;font-weight:600;color:var(--primary)}
+.empty{padding:48px 16px;text-align:center;color:var(--text-2);font-size:14px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.empty button,.home a{height:40px;padding:0 20px;border-radius:20px;border:1px solid #C9CDD4;background:#fff;font-size:14px;font-family:inherit;color:var(--text)}
+.home{padding:32px 16px;display:flex;flex-direction:column;gap:16px;align-items:center;color:var(--text-2)}
+.home a{display:inline-flex;align-items:center;text-decoration:none}
+.tabbar{height:60px;background:#fff;border-top:1px solid var(--line);display:flex}
+.tabbar a{flex:1;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text-3);text-decoration:none}
+.tabbar a[aria-current="page"]{color:var(--primary);font-weight:600}
+</style>
+</head>
+<body>
+
+<section class="demo-panel" aria-label="演示数据">
+  <h2>演示数据（不属于被测页面）</h2>
+  <label><input type="radio" name="dataset" value="default" checked> 默认数据</label>
+  <label><input type="radio" name="dataset" value="empty"> 今天无可约</label>
+  <label><input type="checkbox" id="bug"> 模拟缺陷</label>
+</section>
+
+<div class="app">
+  <header class="nav"><h1 id="title">首页</h1></header>
+
+  <main class="view" id="view-home">
+    <div class="home">
+      <p>欢迎使用心理咨询小程序（演示）</p>
+      <a href="#" id="go-consult">找咨询师</a>
+    </div>
+  </main>
+
+  <main class="view" id="view-consult" hidden>
+    <div class="filters">
+      <div class="row">
+        <select id="f-tag" aria-label="擅长方向">
+          <option value="">擅长方向</option>
+          <option>焦虑</option><option>情绪管理</option><option>职场压力</option><option>睡眠</option><option>青少年</option><option>自我成长</option>
+        </select>
+        <select id="f-price" aria-label="价格">
+          <option value="">价格</option><option value="0-300">300 元以下</option><option value="300-9999">300 元及以上</option>
+        </select>
+        <select id="f-date" aria-label="可约日期">
+          <option value="">可约日期</option><option value="0">今天</option><option value="1">明天</option><option value="2">后天</option>
+        </select>
+      </div>
+      <label class="switch"><input type="checkbox" role="switch" id="f-today"> 只看今天可约</label>
+    </div>
+    <ul class="list" id="list" aria-label="咨询师"></ul>
+    <div class="empty" id="empty" hidden>
+      <span id="empty-text">今天暂无可约的咨询师</span>
+      <button type="button" id="show-all">查看全部</button>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="底部标签栏">
+    <a href="#" data-view="home" aria-current="page">首页</a>
+    <a href="#" data-view="consult">咨询</a>
+    <a href="#" data-view="mine">我的</a>
+  </nav>
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var bug = document.getElementById('bug');
+  bug.checked = params.get('bug') === '1';
+  if (params.get('data') === 'empty') document.querySelector('input[value="empty"]').checked = true;
+
+  var DAY = ['今天', '明天', '后天', '10月28日'];
+  var DATA = {
+    default: [
+      { name: '林静', title: '心理咨询师 · 从业 8 年', tags: ['焦虑', '情绪管理'], price: 300, day: 0, time: '14:00' },
+      { name: '周远', title: '心理咨询师 · 从业 5 年', tags: ['职场压力', '睡眠'], price: 260, day: 1, time: '10:00' },
+      { name: '陈思敏', title: '心理咨询师 · 从业 12 年', tags: ['青少年', '焦虑'], price: 450, day: 0, time: '19:00' },
+      { name: '许然', title: '心理咨询师 · 从业 3 年', tags: ['自我成长'], price: 200, day: 3, time: '20:00' }
+    ]
+  };
+  DATA.empty = DATA.default.map(function (c) { return Object.assign({}, c, { day: c.day === 0 ? 1 : c.day }); });
+
+  var $ = function (id) { return document.getElementById(id); };
+  var fTag = $('f-tag'), fPrice = $('f-price'), fDate = $('f-date'), fToday = $('f-today');
+
+  function dataset() { return document.querySelector('input[name="dataset"]:checked').value; }
+
+  function render() {
+    var onlyToday = fToday.checked;
+    if (!bug.checked) {
+      if (onlyToday) fDate.value = '';
+      fDate.disabled = onlyToday;
+    }
+    var rows = DATA[dataset()].filter(function (c) {
+      if (fTag.value && c.tags.indexOf(fTag.value) < 0) return false;
+      if (fPrice.value) { var r = fPrice.value.split('-'); if (c.price < +r[0] || c.price >= +r[1]) return false; }
+      if (fDate.value !== '' && c.day !== +fDate.value) return false;
+      if (onlyToday && c.day !== 0) return false;
+      return true;
+    });
+    var list = $('list');
+    list.innerHTML = '';
+    rows.forEach(function (c) {
+      var li = document.createElement('li');
+      li.className = 'card';
+      li.innerHTML = '<div><span class="name"></span> <span class="sub"></span></div><div class="tags"></div>' +
+        '<div class="foot"><span class="price"></span><span class="next"></span></div>';
+      li.querySelector('.name').textContent = c.name;
+      li.querySelector('.sub').textContent = c.title;
+      c.tags.forEach(function (t) { var s = document.createElement('span'); s.className = 'tag'; s.textContent = t; li.querySelector('.tags').appendChild(s); });
+      li.querySelector('.price').textContent = '¥' + c.price + ' /50 分钟';
+      li.querySelector('.next').textContent = '最近可约 ' + DAY[c.day] + ' ' + c.time;
+      list.appendChild(li);
+    });
+    $('empty').hidden = rows.length > 0;
+    $('empty-text').textContent = onlyToday ? '今天暂无可约的咨询师' : '暂无符合条件的咨询师';
+    $('show-all').hidden = !onlyToday;
+  }
+
+  function show(view) {
+    $('view-home').hidden = view !== 'home';
+    $('view-consult').hidden = view !== 'consult';
+    $('title').textContent = view === 'consult' ? '咨询师列表' : view === 'mine' ? '我的' : '首页';
+    document.querySelectorAll('.tabbar a').forEach(function (a) {
+      if (a.dataset.view === view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    if (view === 'consult') {        // 每次进入列表，开关默认关闭（PRD 待确认问题 2 的建议答案）
+      fToday.checked = false;
+      render();
+    }
+  }
+
+  document.querySelectorAll('.tabbar a').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); show(a.dataset.view); });
+  });
+  $('go-consult').addEventListener('click', function (e) { e.preventDefault(); show('consult'); });
+  [fTag, fPrice, fDate, fToday].forEach(function (el) { el.addEventListener('change', render); });
+  $('show-all').addEventListener('click', function () { fToday.checked = false; render(); });
+  document.querySelectorAll('.demo-panel input').forEach(function (el) { el.addEventListener('change', render); });
+
+  show(params.get('page') === 'consult' ? 'consult' : 'home');
+})();
+</script>
+</body>
+</html>

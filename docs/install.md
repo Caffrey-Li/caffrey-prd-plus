@@ -2,6 +2,8 @@
 
 本工具的主格式是开放的 Agent Skills 格式（一个包含 `SKILL.md` 的文件夹），Claude、Codex、Cursor、DeepSeek Harness、Grok、WorkBuddy 都能直接识别。不支持 Skill 的聊天工具使用 `dist/` 下的单文件版。
 
+仓库包含两个技能：`caffrey-prd-plus`（写 PRD）和 `caffrey-test-runner`（执行测试）。一键脚本和插件会同时安装两个；单文件版只包含 `caffrey-prd-plus`。
+
 **每个工具只选一种安装方式**，否则同一个工具里可能出现两个同名技能。
 
 | 安装方式 | 适用工具 | 怎么更新 |
@@ -45,7 +47,7 @@ Windows 用户请在 Git Bash 中运行。
 
 插件方式安装后，技能名为 `caffrey-prd-plus:caffrey-prd-plus`，直接说“帮我写个 PRD”即可触发。
 
-**Claude 网页版 / 桌面版**：把 `skills/caffrey-prd-plus` 文件夹压缩成 zip，在设置的 Skills 管理处上传。更新时重新上传。
+**Claude 网页版 / 桌面版**：把 `skills/` 下的每个技能文件夹分别压缩成 zip，在设置的 Skills 管理处逐个上传。更新时重新上传。
 
 ## Cursor 插件
 
@@ -64,16 +66,16 @@ git clone https://github.com/Caffrey-Li/caffrey-prd-plus.git
 cd caffrey-prd-plus
 ```
 
-再按工具复制技能文件夹 `skills/caffrey-prd-plus`：
+再按工具复制 `skills/` 下的技能文件夹（下面的命令会同时复制写 PRD 和执行测试两个技能）：
 
 | 工具 | 命令 |
 | --- | --- |
-| Claude Code | `mkdir -p ~/.claude/skills && cp -r skills/caffrey-prd-plus ~/.claude/skills/` |
-| Codex | `mkdir -p ~/.agents/skills && cp -r skills/caffrey-prd-plus ~/.agents/skills/` |
-| Cursor | `mkdir -p ~/.cursor/skills && cp -r skills/caffrey-prd-plus ~/.cursor/skills/` |
-| DeepSeek Harness | `mkdir -p ~/.dsh/skills && cp -r skills/caffrey-prd-plus ~/.dsh/skills/` |
-| Grok Build | `mkdir -p ~/.grok/skills && cp -r skills/caffrey-prd-plus ~/.grok/skills/` |
-| WorkBuddy | `mkdir -p ~/.workbuddy/skills && cp -r skills/caffrey-prd-plus ~/.workbuddy/skills/` |
+| Claude Code | `mkdir -p ~/.claude/skills && cp -r skills/* ~/.claude/skills/` |
+| Codex | `mkdir -p ~/.agents/skills && cp -r skills/* ~/.agents/skills/` |
+| Cursor | `mkdir -p ~/.cursor/skills && cp -r skills/* ~/.cursor/skills/` |
+| DeepSeek Harness | `mkdir -p ~/.dsh/skills && cp -r skills/* ~/.dsh/skills/` |
+| Grok Build | `mkdir -p ~/.grok/skills && cp -r skills/* ~/.grok/skills/` |
+| WorkBuddy | `mkdir -p ~/.workbuddy/skills && cp -r skills/* ~/.workbuddy/skills/` |
 
 只想在某个项目里使用时，把 `~/` 换成项目根目录下的同名路径，例如 `.claude/skills/`、`.agents/skills/`。
 
@@ -109,6 +111,18 @@ Grok Bot 支持在对话中让 Bot 把一套流程保存为私有技能：
 - 普通对话：开始时上传该文件，说“请按这个文件的规则帮我写 PRD”。
 
 **更新**：能联网的工具在使用时会提示新版本，按提示重新下载并上传即可。
+
+## 执行测试需要的工具
+
+`caffrey-test-runner` 需要能操作被测系统的工具，Web 端任选其一：
+
+- **Playwright MCP**（推荐，可批量执行、保存截图）：Claude Code 运行 `claude mcp add playwright npx @playwright/mcp@latest`；Codex 运行 `codex mcp add playwright npx "@playwright/mcp@latest"`；Cursor 在 Settings → MCP 中添加命令 `npx @playwright/mcp@latest`。需要电脑上装有 Node.js。
+- **Claude in Chrome**：用你自己的 Chrome 和登录状态。
+- **Claude 桌面版内置浏览器**。
+
+App、Mac / Windows 应用、小程序的准备方式见 `skills/caffrey-test-runner/references/` 下对应的指南。
+
+**试跑**：打开 `examples/demo/demo-test-cases.yaml`，把 ENTRY 改成你电脑上 `examples/demo/lite-filter-demo.html` 的完整地址（如 `file:///Users/你的用户名/.../lite-filter-demo.html`），对 agent 说“用 caffrey-test-runner 执行这个文件”。
 
 ## 维护者：发布新版本
 

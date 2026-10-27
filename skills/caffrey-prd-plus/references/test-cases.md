@@ -48,10 +48,11 @@
 meta:
   prd: 在线预约咨询师 PRD
   prd_version: v1.0
-  generator: caffrey-prd-plus v0.3.0
-  target: 微信小程序              # 被测端：Web / H5 / 小程序 / App / API
+  generator: caffrey-prd-plus v0.4.0
+  target: 微信小程序              # 被测端：Web / H5 / 小程序 / App / Mac / Windows / API
 
 env:                              # 执行前由用户填写，用例中用 ${名称} 引用
+  ENV_TYPE: 测试                  # 测试 / 预发 / 生产；生产环境只执行 prod_safe 的用例
   ENTRY: ""                       # Web 填网址；小程序、App 填进入方式
   USER_A: { account: "", password: "" }   # 已登录、从未预约过的来访者
   COUNSELOR_A: ""                 # 今天有可约时段的咨询师姓名
@@ -69,6 +70,7 @@ run_rules: |
   5. 遇到 note 步骤时暂停请人工完成；无人处理时记为“需人工”。
   6. 不修改用例和期望结果。每条结束后执行 cleanup，再执行下一条。
   7. 全部执行完后，按“结果回填格式”输出结果表和统计。
+  8. ENV_TYPE 为“生产”时，只执行 prod_safe: true 的用例；遇到支付、退款、发消息、删除或修改真实数据的步骤，先停下问人。
 
 cases:
   - id: TC-001
@@ -76,6 +78,7 @@ cases:
     title: 选中时段后锁定并显示倒计时
     type: 正常
     priority: P0
+    prod_safe: false
     pre: [D1]
     setup:
       - login: ${USER_A}
@@ -100,6 +103,7 @@ cases:
 | feature | 是 | 关联的功能编号，可写多个：`[F-03, F-04]` |
 | title | 是 | 一句话场景 |
 | type、priority | 是 | 同飞书表格 |
+| prod_safe | 否 | 可以在生产环境执行时写 true：只读、不产生订单和通知、不改真实数据。默认 false |
 | pre | 否 | 需要的测试数据编号（data 中的 id） |
 | setup | 否 | 进入测试前的准备步骤，失败记为“阻塞” |
 | steps | 是 | 测试步骤，一步一个动作 |
@@ -181,5 +185,6 @@ cases:
 - 用例统计：按功能编号和类型统计数量。
 - 无法生成用例的待定项。
 - 执行前需要用户完成的事：要填写的 env 变量、要准备的 data。
+- 提示用户：提测后可以用 caffrey-test-runner 技能执行这份 YAML，或把它转成 Playwright 等自动化脚本。
 
 样例见仓库 `examples/example-test-cases.md` 和 `examples/example-test-cases.yaml`。
