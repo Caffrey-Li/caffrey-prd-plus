@@ -15,7 +15,7 @@ PRD 正文里只放文本线框图（`wireframe.md`）。用户说“出原型�
 
 一个**自包含的 HTML 文件**，用浏览器直接打开：
 
-- 文件名：`【需求名称】-原型图-v0.x.html`，版本号与 PRD 一致。
+- 文件名：`【需求名称】-原型图-v1.0.html`，版本号与 PRD 一致。
 - 所有页面并排放在一张画布上，按 8.3 用户路径的顺序排列；每个页面上方写“页面名（功能编号）”。
 - 手机页面 390 × 844；电脑页面 1440 × 900，画布上按 50% 缩放显示。
 - 可以点击：按钮和链接按 8.2、8.3 的跳转关系链接到目标页面（`href="#F-03"`），被跳到的页面加主色描边。
@@ -52,7 +52,7 @@ PRD 正文里只放文本线框图（`wireframe.md`）。用户说“出原型�
 
 1. **与线框图一致**：区域顺序、元素、文案、编号都和 8.4 线框图对应。线框图里没有的功能、按钮、字段，原型图里也不加。
 2. **示例数据可以写，但要声明**：为了看起来像真实页面，可以填示例姓名、价格、时间，说明栏必须写“示例数据，仅供示意”。示例数据不能写回 PRD。
-3. **待确认的规则不拍板**：PRD 里标了【TBD】或【待确认】的规则，原型中显示“待确认”，例如“预计退款 ¥ 待确认”。
+3. **只画 PRD 写了的内容**：PRD 没写的规则、文案不自行补充；发现缺失时先请用户确认并更新 PRD。
 4. **只画默认状态**：加载、空状态、异常状态遵循 I-02，不单独画；某个状态对理解很关键时，加一页并在标题注明状态。
 5. **缺页面说明不硬画**：8.1 中有界面、但 8.4 没有页面说明的功能，不出原型；在交付时列出来，例如“F-02 咨询师详情在 8.4 没有页面说明，未出原型，需要的话先补 PRD”。
 
@@ -64,7 +64,7 @@ PRD 正文里只放文本线框图（`wireframe.md`）。用户说“出原型�
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>【需求名称】- 原型图 v0.1</title>
+<title>【需求名称】- 原型图 v1.0</title>
 <style>
 :root{--primary:#2E7D6B;--text:#1F2329;--text-2:#646A73;--text-3:#86909C;--line:#EEEFF1;--bg:#F5F6F7;--card:#FFFFFF;--fill:#F2F3F5}
 *{box-sizing:border-box} body{margin:0;background:#E9EBEE;color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
@@ -80,7 +80,7 @@ body.hide-num .num{display:none}
 </head>
 <body>
 <header class="topbar">
-  <strong>【需求名称】原型图 v0.1</strong>
+  <strong>【需求名称】原型图 v1.0</strong>
   <span>示例数据，仅供示意 · 主色为示意</span>
   <nav><a href="#F-01">咨询师列表</a> · <a href="#F-03">选择时段</a></nav>
   <label><input type="checkbox" id="toggle-num" checked> 显示规则编号</label>

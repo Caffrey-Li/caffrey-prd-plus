@@ -1,4 +1,4 @@
-<!-- 示例：按 caffrey-prd-plus 的 test-cases.md，根据 example-lite-filter.md 生成。为演示格式，假定 PRD 已定稿为 v1.0，待确认问题都采用了建议答案。可执行版本见 example-test-cases.yaml。 -->
+<!-- 示例：按 caffrey-prd-plus 的 test-cases.md，根据 example-lite-filter.md 生成。PRD 为 v1.0。可执行版本见 example-test-cases.yaml。 -->
 
 ## 测试用例（基于 PRD v1.0）
 
@@ -18,7 +18,5 @@
 - D2：测试环境中所有咨询师今天都没有可约时段。
 
 **用例统计**：F-01 共 7 条（正常 4、边界 2、回归 1）。
-
-**无法生成用例的待定项**：无（待确认问题均已按建议答案处理）。
 
 **执行前需要你完成**：在 YAML 的 env 中填写 ENTRY、COUNSELOR_TODAY、COUNSELOR_NOT_TODAY、TAG_OF_TODAY；准备测试数据 D1、D2。

@@ -27,7 +27,7 @@
   <text x="355" y="137" font-size="12" fill="#000000" text-anchor="end" font-weight="bold">新增</text>
   <line x1="0" y1="166" x2="375" y2="166" stroke="#E5E5E5"/>
 
-  <!-- 列表（不变） -->
+  <!-- 列表 -->
   <rect x="16" y="180" width="343" height="96" rx="4" fill="#FFFFFF" stroke="#999999"/>
   <circle cx="50" cy="214" r="20" fill="#E5E5E5"/>
   <text x="50" y="218" font-size="12" fill="#999999" text-anchor="middle">头像</text>
@@ -37,9 +37,9 @@
   <text x="343" y="258" font-size="12" fill="#999999" text-anchor="end">最近可约：{最近可约时间}</text>
 
   <rect x="16" y="288" width="343" height="96" rx="4" fill="#F5F5F5" stroke="#E5E5E5"/>
-  <text x="187.5" y="340" font-size="12" fill="#999999" text-anchor="middle">咨询师卡片（同上，列表其余部分不变）</text>
+  <text x="187.5" y="340" font-size="12" fill="#999999" text-anchor="middle">其余不变</text>
 
-  <!-- 底部标签栏（不变） -->
+  <!-- 底部标签栏 -->
   <line x1="0" y1="752" x2="375" y2="752" stroke="#E5E5E5"/>
   <text x="62.5" y="786" font-size="14" fill="#999999" text-anchor="middle">首页</text>
   <text x="187.5" y="786" font-size="14" fill="#000000" text-anchor="middle" font-weight="bold">咨询</text>
