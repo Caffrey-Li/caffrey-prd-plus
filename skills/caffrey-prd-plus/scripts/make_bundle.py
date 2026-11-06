@@ -226,7 +226,7 @@ PREVIEW_CSS = '''
 body{margin:0;background:#f5f6f7;color:#1f2329;font:15px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
 main{max-width:980px;margin:24px auto;padding:32px 40px;background:#fff;border-radius:8px}
 h1{font-size:26px}h2{font-size:21px;margin-top:36px;border-bottom:1px solid #eee;padding-bottom:6px}h3{font-size:17px;margin-top:28px}h4{font-size:15px;margin-top:22px}
-table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px}th,td{border:1px solid #dee0e3;padding:6px 10px;text-align:left;vertical-align:top}th{background:#f5f6f7}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px}th,td{border:1px solid #dee0e3;padding:6px 10px;text-align:left;vertical-align:top}th{background:#eef0f2}tbody tr:nth-child(even) td{background:#f2f3f5}
 pre{background:#f5f6f7;padding:12px 16px;border-radius:6px;overflow:auto;font:13px/1.6 Menlo,Consolas,monospace}
 code{background:#f2f3f5;padding:0 4px;border-radius:3px}figure{margin:12px 0}img{max-width:100%}
 blockquote{margin:12px 0;padding:4px 14px;border-left:3px solid #ccc;color:#646a73}

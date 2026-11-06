@@ -59,6 +59,7 @@ curl -fsSL https://raw.githubusercontent.com/Caffrey-Li/caffrey-prd-plus/main/sc
 示例输出见 [examples/](examples/)：
 
 - `example-psych-booking.md`：完整版（心理咨询小程序预约），含确认过程、线框图、字段表、流程图、用户路径图、状态图、信息流转图和时序图
+- `example-psych-booking-core.md`、`example-psych-booking-lite.md`：同一需求的核心版和精简版，方便对比三个版本
 - `example-lite-filter.md`：精简版（咨询师列表加一个筛选开关）
 - `example-test-cases.md`、`example-test-cases.yaml`：上面精简版需求的测试用例（飞书表格 + 可执行 YAML）
 - `bundle-lite-filter/`：精简版需求的全包交付样例（页面、线框图和流程图 PNG、HTML 预览、manifest、导入说明）
