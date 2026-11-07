@@ -47,6 +47,8 @@ pages/
 python3 scripts/make_bundle.py 咨询师列表增加只看今天可约-PRD-v1.0
 ```
 
+单文件版只包含文本规范，不包含脚本和导入模板。若会话可以联网和运行代码，先从项目仓库获取 `skills/caffrey-prd-plus/scripts/make_bundle.py` 和 `skills/caffrey-prd-plus/assets/IMPORT.md`，保持目录结构后运行脚本；不能获取或运行时按上面的方式交接，不声称已经生成全包。
+
 脚本会转线框图、渲染 Mermaid 图、检查图片和每个链接、生成 `preview.html` 和 `manifest.yaml`、复制 `IMPORT.md`，最后打成同名 zip。
 
 4. 脚本报出的问题全部修正后再交付。Mermaid 无法渲染时，安装 mermaid-cli 后重跑；仍无法完成则按上面的方式交接，不交付不完整的包。
