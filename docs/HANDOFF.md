@@ -1,6 +1,6 @@
 # caffrey-prd-plus 交接文档
 
-更新：2026-11-07，当前版本 **v0.8.1**。新对话接手时先读本文件，再读仓库中的 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
+更新：2026-11-07，接手方改为 Codex，当前版本 **v0.8.1**。新对话接手时先读本文件，再读仓库中的 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
 
 ## 一、项目是什么
 
@@ -22,7 +22,7 @@
 | GitHub | v0.8.1 |
 | 用户电脑 | v0.8.1 |
 | 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
-| 新 Claude 账号 | 还没装技能、还没授权 GitHub |
+| 接手方 | Codex（2026-11-07 起），仓库根目录 `AGENTS.md` 是给它的入口 |
 
 ## 三、核心设计（已和用户确认，改动前先问）
 
@@ -56,7 +56,7 @@ docs/                          install.md（安装说明）、HANDOFF.md（本�
 2. `CHANGELOG.md` 顶部写 `## vX.Y.Z（日期）`：新功能或结构调整升次版本号，措辞修正升修订号。
 3. 运行 `python3 scripts/release.py X.Y.Z`：同步两个技能的 VERSION、插件清单版本号，重新生成单文件版。
 4. 检查：线框图格式（行首只能是 ┌│├└，横线 32 / 60）、表格列数一致、文件引用都存在。
-5. 提交并推送 main。提交作者用 `Claude <noreply@anthropic.com>`（否则 GitHub 显示未验证）。
+5. 提交并推送 main。Claude 会话的提交作者用 `Claude <noreply@anthropic.com>`；Codex 等其他工具用用户本机的 git 身份。
 6. 给 Claude 网页 / 桌面版用户打技能 zip：在 `skills/` 下分别把 `caffrey-prd-plus`、`caffrey-test-runner` 文件夹各压成一个 zip。
 7. 同步用户电脑上的项目文件夹（该文件夹不允许删除文件：先在 `$HOME` 生成 zip，再复制进去解压覆盖）。
 
