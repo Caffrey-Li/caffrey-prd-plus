@@ -1,5 +1,5 @@
 <!-- 本文件由 scripts/build_single.py 自动生成，请勿直接修改 -->
-# caffrey-prd-plus 单文件版 v0.9.1
+# caffrey-prd-plus 单文件版 v0.10.0
 
 使用说明（写给 AI）：这是 caffrey-prd-plus 技能的单文件版本。下文中提到的
 `references/xxx.md` 文件，都已按「=== 文件：references/xxx.md ===」的分隔标题

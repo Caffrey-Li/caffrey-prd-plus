@@ -1,5 +1,7 @@
 # 安装与更新
 
+本地 MCP 服务的安装与已验证范围见 [`mcp/README.md`](../mcp/README.md)；不代表各平台均已完成接入验证。
+
 本工具的主格式是开放的 Agent Skills 格式（一个包含 `SKILL.md` 的文件夹），Claude、Codex、Cursor、DeepSeek Harness、Grok、WorkBuddy 都能直接识别。不支持 Skill 的聊天工具使用 `dist/` 下的单文件版。
 
 仓库包含两个技能：`caffrey-prd-plus`（写 PRD）和 `caffrey-test-runner`（执行测试）。一键脚本和插件会同时安装两个；单文件版只包含 `caffrey-prd-plus`。

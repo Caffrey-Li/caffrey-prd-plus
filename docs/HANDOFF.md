@@ -1,6 +1,6 @@
 # caffrey-prd-plus 交接文档
 
-更新：2026-11-07，接手方为 Codex，当前版本 **v0.9.1**。新对话接手时先读本文件，再读仓库中的 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
+更新：2026-11-07，接手方为 Codex，当前版本 **v0.10.0**。新对话接手时先读本文件，再读仓库中的 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
 
 ## 一、项目是什么
 
@@ -19,8 +19,8 @@
 
 | 项目 | 状态 |
 | --- | --- |
-| GitHub | v0.9.1（提交推送后） |
-| 用户电脑 | 新克隆仓库 v0.9.1；原有项目文件夹未覆盖 |
+| GitHub | v0.10.0（提交推送后） |
+| 用户电脑 | 新克隆仓库 v0.10.0；原有项目文件夹未覆盖 |
 | 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
 | 接手方 | Codex（2026-11-07 起），仓库根目录 `AGENTS.md` 是给它的入口 |
 
@@ -45,6 +45,7 @@ skills/caffrey-prd-plus/       SKILL.md、VERSION、references/（模版、版�
 skills/caffrey-test-runner/    SKILL.md、VERSION、references/（用例格式、各端执行指南、结果格式、转 Playwright）、assets/playwright/、scripts/pw_results.js
 dist/caffrey-prd-plus-prompt.md  单文件版（只含 PRD 技能），由脚本生成，不要手改
 scripts/                       install.sh（一键安装）、release.py（发版）、build_single.py（生成单文件版）
+mcp/                           本地 MCP 服务与使用说明
 .claude-plugin/、.cursor-plugin/ 插件清单（隐藏文件夹）
 examples/                      同一需求的完整版 / 核心版 / 精简版示例（example-psych-booking*.md）、精简版小需求示例、新产品总纲示例、全包样例 bundle-lite-filter/、测试用例样例、原型图样例、demo/
 docs/                          install.md（安装说明）、HANDOFF.md（本文件）
@@ -84,7 +85,9 @@ docs/                          install.md（安装说明）、HANDOFF.md（本�
 - 限制：MCP 只提供规范、问题和检查，正文仍由接入的 Agent 写；远程版执行测试只能测网页。
 - 建议顺序：先做本地版加 `check_prd`，再按需要做远程版。
 
-**用户于 2026-11-07 确认的接入目标**：Claude、Codex、Cursor、Grok Bot、Muse、WorkBuddy、Trae、Coze、飞书智能伙伴。各平台的 MCP 能力和接入方式需逐一核实，网页平台需求意味着需要评估远程版。MCP 服务尚未实现；优先修复全包和网页测试交付，再推进插件化。
+**用户于 2026-11-07 确认的接入目标**：Claude、Codex、Cursor、Grok Bot、Meta Muse 个人助手、WorkBuddy、Trae、Coze、飞书智能伙伴。各平台的 MCP 能力和接入方式需逐一核实，不把 Muse Code 的能力等同于 Muse 助手。
+
+**进度**：已实现本地 stdio MCP 服务，读取两个技能规范，提供五个工具和四个提示词，并用 MCP SDK 客户端进行协议验证。`check_prd` 当前只检查部分待定词、编号链接、括号和字段表，未覆盖原方案所有规则；尚未打包发布 pip / npm 包、登记 MCP 目录、实现带认证的远程服务或逐平台实测。远程服务需先设计隔离和认证，不能直接把现有本地文件操作工具暴露到公网。
 
 ## 八、其他待办
 
