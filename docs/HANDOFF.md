@@ -1,6 +1,6 @@
 # caffrey-prd-plus 交接文档
 
-更新：2026-11-05，当前版本 **v0.8.1**。新对话接手时先读本文件，再读仓库中的 `CHANGELOG.md` 和两个技能的 `SKILL.md`。
+更新：2026-11-07，当前版本 **v0.8.1**。新对话接手时先读本文件，再读仓库中的 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
 
 ## 一、项目是什么
 
@@ -21,7 +21,7 @@
 | --- | --- |
 | GitHub | v0.8.1 |
 | 用户电脑 | v0.8.1 |
-| 旧 Claude 账号里装的技能 | v0.4.0（旧，不再维护） |
+| 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
 | 新 Claude 账号 | 还没装技能、还没授权 GitHub |
 
 ## 三、核心设计（已和用户确认，改动前先问）
@@ -46,7 +46,7 @@ skills/caffrey-test-runner/    SKILL.md、VERSION、references/（用例格式�
 dist/caffrey-prd-plus-prompt.md  单文件版（只含 PRD 技能），由脚本生成，不要手改
 scripts/                       install.sh（一键安装）、release.py（发版）、build_single.py（生成单文件版）
 .claude-plugin/、.cursor-plugin/ 插件清单（隐藏文件夹）
-examples/                      完整版示例、精简版示例、全包样例、测试用例样例、原型图样例、demo/（演示页面 + 可运行的 Playwright 脚本）
+examples/                      同一需求的完整版 / 核心版 / 精简版示例（example-psych-booking*.md）、精简版小需求示例、新产品总纲示例、全包样例 bundle-lite-filter/、测试用例样例、原型图样例、demo/
 docs/                          install.md（安装说明）、HANDOFF.md（本文件）
 ```
 
@@ -64,17 +64,38 @@ docs/                          install.md（安装说明）、HANDOFF.md（本�
 
 - **推送 GitHub**：需要新账号授权（Claude 的 GitHub 应用或 claude.ai 中连接 GitHub）。没有授权时只能让用户手动上传；网页拖拽上传会丢掉隐藏文件夹 `.claude-plugin`、`.cursor-plugin`，这两个文件夹里的文件要在 GitHub 网页上用“Create new file / 编辑”逐个改。
 - **更新 Claude 里的技能**：只能上传 zip。替用户上传需要 Chrome 的 Claude 扩展在线；“生成技能确认卡片”只能替换 SKILL.md，不能更新参考文件，不要用。
-- **云端环境**：npm 可能被网络策略拦截；预装了 Playwright 1.63，可用其自带的测试运行器。
+- **云端环境**：npm 可能被网络策略拦截；预装了 Playwright 1.63。`mmdc` 不要加 `-p` 参数，加了会找不到浏览器。
+- **验证示例**：把示例 PRD 正文放进临时目录的 `pages/`，运行 `python3 skills/caffrey-prd-plus/scripts/make_bundle.py <目录> --no-zip`，脚本会渲染 Mermaid、检查所有链接；再用 Playwright 截图看 `preview.html`。
+- **Mermaid 状态图**：一个对象一张图，嵌套画多个对象时同名状态会被合并。
+- **用户电脑文件夹**：不能删除文件，zip 不能直接在里面生成（会报 Operation not permitted），先在 `$HOME` 生成再复制；多余文件移到 `_to_delete/`。上一次同步方式：在用户电脑的 shell 中从 GitHub 下载 main 的 tar 包，解压到 `$HOME/src`，再 `cp -R` 覆盖到项目文件夹。
 
-## 七、待办
+## 七、正在进行：插件化，让各个 Agent 接入
 
-- [ ] 在 Claude 中上传 v0.8.1 的两个技能
-- [ ] 用户用真实需求试用 v0.8.1，根据反馈继续精简
-- [ ] Grok Bot：复测单文件版（约 6 万字，注意能否完整读取）、线框图、“出原型图”
+**用户需求**（2026-11-05）：“我想将这个做为一个插件，让各个 Agent 可以接入使用，需要如何改造。”
+
+**已给出的方案**，用户还没回复确认，**新对话先问用户下面的问题再动手**：
+
+- 现状：已是开放技能格式，并带 Claude Code、Cursor 插件清单，能读技能的 Agent 已能用；缺口是 Coze、Dify、飞书智能伙伴、ChatGPT、自研 Agent。
+- 方案：保留技能，新增一层 MCP 服务。
+  - 提示词：写 PRD、改 PRD、出测试用例、执行测试。
+  - 工具：`start_prd` 返回第 1 步选择题；`get_questions` 按板块返回第 2 步问题和建议答案；`get_reference` 按需返回模板、类型、行业检查项；`check_prd` 用代码检查 TBD、括号、链接、字段表必填和长度 / 格式、缺图、未提供的上线计划和里程碑；`build_bundle` 复用 make_bundle.py 生成全包。
+  - 部署：本地版发 npm 或 pip 包，适合 Claude Code、Cursor、Codex、WorkBuddy；远程版部署成网址，适合网页类 Agent，需要服务器、域名和无头浏览器。
+- 仓库改动：新建 `mcp/`，直接读 `skills/` 中的规范；自检清单中能用代码判断的项写成 `check_prd` 脚本，技能和 MCP 共用；`release.py` 同步 npm / pip 包版本，发布并登记 MCP 官方目录；`docs/install.md` 增加各 Agent 的接入配置。
+- 限制：MCP 只提供规范、问题和检查，正文仍由接入的 Agent 写；远程版执行测试只能测网页。
+- 建议顺序：先做本地版加 `check_prd`，再按需要做远程版。
+
+**待用户回答**：主要接入哪些 Agent？要不要支持 Coze、Dify、飞书智能伙伴这类网页平台？后者决定是否做远程版。
+
+## 八、其他待办
+
+- [ ] 在新账号的 Claude 中上传 v0.8.1 的两个技能
+- [ ] 用户用真实需求试用，根据反馈继续精简
+- [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
 - [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则
 - [ ] 实测 WorkBuddy、Cursor 的安装方式，修正 docs/install.md
-- [ ] 考虑建 GitHub Release，附两个技能 zip 和单文件版，方便别人下载更新
+- [ ] 考虑建 GitHub Release，附两个技能 zip 和单文件版
 
-## 八、历史参考
+## 九、历史参考
 
 - 模版分析与产品方案、PRD 结构建议、线框图与原型图对比画布，都在旧账号的 Claude Artifact 中，新账号无法访问；结论已写进本文件和 CHANGELOG。
+- 近期用户反馈的原话和改动：见 CHANGELOG v0.7.0 至 v0.8.1。
