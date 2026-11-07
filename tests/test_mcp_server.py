@@ -1,6 +1,9 @@
 import asyncio
+import socket
+import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -46,3 +49,34 @@ class MCPServerTest(unittest.TestCase):
                     self.assertTrue(root.with_suffix('.zip').is_file())
 
         asyncio.run(run())
+
+    def test_http_preview_has_no_filesystem_bundle_tool(self):
+        with socket.socket() as sock:
+            sock.bind(('127.0.0.1', 0))
+            port = sock.getsockname()[1]
+        http_script = SERVER.with_name('http_server.py')
+        process = subprocess.Popen([sys.executable, '-B', str(http_script), '--port', str(port)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        try:
+            for _ in range(100):
+                if process.poll() is not None:
+                    self.fail('HTTP 预览启动失败')
+                try:
+                    with socket.create_connection(('127.0.0.1', port), timeout=0.1):
+                        break
+                except OSError:
+                    time.sleep(0.1)
+            else:
+                self.fail('HTTP 预览启动超时')
+
+            async def run():
+                async with Client(f'http://127.0.0.1:{port}/mcp') as client:
+                    names = {tool.name for tool in (await client.list_tools()).tools}
+                    self.assertEqual(names, {'start_prd', 'get_questions', 'get_reference', 'check_prd'})
+                    result = await client.call_tool('get_reference', {'path': 'prd/references/prd-template.md'})
+                    self.assertFalse(result.is_error)
+                    self.assertIn('PRD 核心模版', result.content[0].text)
+
+            asyncio.run(run())
+        finally:
+            process.terminate()
+            process.wait(timeout=10)
