@@ -29,6 +29,7 @@ ORDER = [
     "references/change-management.md",
     "references/user-stories.md",
     "references/test-cases.md",
+    "references/test-plan.md",
 ]
 
 HEADER = """<!-- 本文件由 scripts/build_single.py 自动生成，请勿直接修改 -->

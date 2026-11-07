@@ -22,7 +22,7 @@ metadata:
 | 新产品 | “做一个类似 XX 的产品”“从零做一个平台” | 先走新建流程第 1、2 步，再按 `references/new-product-mode.md` |
 | 更新 PRD | “这个 PRD 要改一下”“加个功能”“出 v1.2” | `references/change-management.md` |
 | 拆用户故事 | “拆成用户故事”“拆一下需求” | `references/user-stories.md` |
-| 生成测试用例 | “出测试用例” | `references/test-cases.md`：输出飞书表格和 agent 可执行的 YAML |
+| 生成测试用例 | “出测试用例”“出测试方案” | `references/test-cases.md`、`references/test-plan.md`：输出表格、可执行 YAML 和 Agent 测试方案 |
 | 出原型图 | “出原型图”“画个原型”“做个能点的原型” | `references/prototype.md`：只在用户要求时出 |
 
 ## 版本检查（每个对话只做一次）
@@ -90,7 +90,7 @@ PRD 是开发和测试照着执行的最终文档，**正文里不能出现任�
 ```
 
 - 板块与章节的对应关系见 `references/section-matrix.md` 第三节。
-- 只能聊天、不能生成文件的平台不出现第 ③ 项，固定为“只要文本”。
+- 按当前会话实际能力判断，不按平台名称判断：能生成并交付文件就提供全包选项；能力不明时先确认。无法生成全包时说明缺口，提供可复制的完整内容和转交打包说明，不把 Markdown 冒充全包。
 
 ### 第 2 步：确认所有不确定的信息
 
@@ -129,7 +129,7 @@ PRD 是开发和测试照着执行的最终文档，**正文里不能出现任�
 ### 第 5 步：修改
 
 - 用户提出修改时，按 `references/change-management.md` 更新版本号和变更记录。
-- 定稿后用一行提示下一步可以做什么：出原型图、生成测试用例。不主动生成。
+- 定稿后询问是否同时生成测试用例和 Agent 测试方案；确认后按 `references/test-cases.md` 和 `references/test-plan.md` 一起交付。原型图只在用户要求时生成。
 
 ## 写作铁律
 
@@ -147,7 +147,7 @@ PRD 是开发和测试照着执行的最终文档，**正文里不能出现任�
 ## 输出格式
 
 - 只要文本：在对话中输出完整 PRD；单条消息放不下时按章节分多条，每条开头写“续 2/3”。
-- 全包：按 `references/bundle.md` 生成压缩包，对话里只写包里有什么、怎么导入，不再贴全文。
+- 全包：按 `references/bundle.md` 生成并验证完整压缩包；只有 Markdown、Mermaid 源码或缺少交互预览时不能称为全包。
 - PRD 之后不附自检结果和问题清单。
 - 用户要求原型图时，按 `references/prototype.md` 出可点击的 HTML 原型，不主动出。
 
@@ -173,3 +173,4 @@ PRD 是开发和测试照着执行的最终文档，**正文里不能出现任�
 | `references/change-management.md` | 更新模式：版本号、变更记录、正文标记 |
 | `references/user-stories.md` | 用户故事拆解格式 |
 | `references/test-cases.md` | 测试用例：生成前置条件、飞书表格、agent 可执行 YAML、结果回填格式 |
+| `references/test-plan.md` | 网页 Agent 测试方案及执行交接 |

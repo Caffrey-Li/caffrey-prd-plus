@@ -103,6 +103,8 @@ Grok Bot 支持在对话中让 Bot 把一套流程保存为私有技能：
 2. 说：“请把这份文件完整保存为一个名为 caffrey-prd-plus 的私有技能，以后我说写 PRD、整理需求时使用它。”
 3. 在 Bot 的 Connect apps → Private skills 中确认该技能已对当前 Bot 启用。
 
+选择全包时，请 Bot 确认当前会话具备文件生成、图表渲染和附件交付能力；交付后检查压缩包中的图、`preview.html` 的悬停、跳转和返回。只有 Markdown 或 Mermaid 源码不是完整全包；无法完成时按提示交给能打包的 Agent 处理。单文件版只包含 PRD 技能，网页执行仍需可操作浏览器的 Agent 和测试执行技能。
+
 ## 其他聊天工具（ChatGPT、Gemini、Kimi、豆包等）
 
 使用单文件版 [`dist/caffrey-prd-plus-prompt.md`](https://raw.githubusercontent.com/Caffrey-Li/caffrey-prd-plus/main/dist/caffrey-prd-plus-prompt.md)（约 3.7 万字）：

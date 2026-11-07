@@ -327,7 +327,7 @@ def main():
                 notes.append(f'{png.name}：已渲染（{how}）')
             else:
                 diag_uris.append('')
-                notes.append(f'{png.name}：无法渲染，HTML 预览中显示源码。可安装 mermaid-cli 后重跑')
+                errors.append(f'{png.name}：无法渲染；安装 mermaid-cli 后重跑')
         page_html.append(md_to_html(text, imgs, diag_uris))
 
     for rel, target in all_links:

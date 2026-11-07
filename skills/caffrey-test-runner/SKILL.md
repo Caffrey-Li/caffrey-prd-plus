@@ -23,6 +23,8 @@ metadata:
 
 ### 第 1 步：读用例
 
+如同时提供 Agent 测试方案，先读取方案、对应 PRD 版本和 YAML；按方案确认范围和环境，逐条执行仍以 YAML 为准。方案与用例冲突或关键内容缺失时停止并询问，不自行改写预期。
+
 1. 用例是 caffrey-prd-plus 的 YAML：直接读取 meta、env、data、run_rules、cases。格式说明见 `references/case-format.md`。
 2. 用例是飞书表格、Excel 或其他格式：先按 `references/case-format.md` 转成 YAML，展示给用户确认后再执行。转换时看不懂的步骤不要猜，列出来问。
 3. 执行范围：默认全部；用户可以按编号（TC-001、TC-003）、功能（F-03）、优先级（“只跑 P0”即冒烟）、类型（“只跑回归”）指定。

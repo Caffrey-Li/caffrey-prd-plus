@@ -20,3 +20,5 @@
 **用例统计**：F-01 共 7 条（正常 4、边界 2、回归 1）。
 
 **执行前需要你完成**：在 YAML 的 env 中填写 ENTRY、COUNSELOR_TODAY、COUNSELOR_NOT_TODAY、TAG_OF_TODAY；准备测试数据 D1、D2。
+
+网页执行方案示例见 `demo/agent-test-plan.md`，配合演示网页和 `demo/demo-test-cases.yaml` 使用；它不能代替对真实系统的测试。
