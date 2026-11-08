@@ -23,7 +23,7 @@
 | 用户电脑 | `caffrey-prd-plus` 已合并为 v0.11.0 的 git 仓库；`caffrey-prd-plus-git` 内容已删除，空文件夹由用户删除 |
 | 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
 | 接手方 | Codex（2026-11-07 起）和新 Claude 账号交替开发；入口为 `AGENTS.md`，Claude Code 读 `CLAUDE.md`，Cursor 读 `.cursor/rules/`，都指向它；Grok Bot 用 `docs/GROK-BOT-PROMPT.md` |
-| 新 Claude 账号 | 已连接 GitHub，可推送；已拿到 v0.6.0 技能 zip，需换成 v0.11.0 |
+| 新 Claude 账号 | 已连接 GitHub，可推送；已给 v0.11.0 技能 zip，建议改为插件安装（见第六节） |
 
 ## 三、核心设计（已和用户确认，改动前先问）
 
@@ -69,7 +69,8 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 ## 六、注意事项
 
 - **推送 GitHub**：Codex 用用户本机的 git 身份推送。Claude 需要在 claude.ai「设置 → 连接器」连接 GitHub 并授权本仓库；Claude 会话中用户电脑的 shell 连不上 GitHub。没有授权时只能让用户手动上传；网页拖拽上传会丢掉隐藏文件夹 `.claude-plugin`、`.cursor-plugin`，这两个文件夹里的文件要在 GitHub 网页上用“Create new file / 编辑”逐个改。
-- **更新 Claude 里的技能**：只能上传 zip。替用户上传需要 Chrome 的 Claude 扩展在线；“生成技能确认卡片”只能替换 SKILL.md，不能更新参考文件，不要用。
+- **更新 Claude 里的技能**：推荐把仓库作为插件安装：Claude 网页 / 桌面版在「Customize → Plugins → Add → Add marketplace → Add from a repository」填 `Caffrey-Li/caffrey-prd-plus`；Claude Code 用 `/plugin marketplace add Caffrey-Li/caffrey-prd-plus`，第三方市场默认不自动更新，需在 `/plugin` 的 Marketplaces 中开启 Enable auto-update。插件按 `plugin.json` 的 `version` 判断是否有更新，只改文件不升版本号不会更新。装插件后删除手动上传的同名技能。不装插件时只能上传 zip；“生成技能确认卡片”只能替换 SKILL.md，不能更新参考文件，不要用。
+- **“插件化”与插件安装是两件事**：第七节的插件化指 MCP 服务，给 Coze、飞书等不能读技能的 Agent 用；Claude、Codex、Cursor 直接装技能或插件。
 - **云端环境**：npm 可能被网络策略拦截；预装了 Playwright 1.63。`mmdc` 不要加 `-p` 参数，加了会找不到浏览器。
 - **验证示例**：把示例 PRD 正文放进临时目录的 `pages/`，运行 `python3 skills/caffrey-prd-plus/scripts/make_bundle.py <目录> --no-zip`，脚本会渲染 Mermaid、检查所有链接；再用 Playwright 截图看 `preview.html`。
 - **Mermaid 状态图**：一个对象一张图，嵌套画多个对象时同名状态会被合并。
@@ -96,7 +97,7 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 
 ## 八、其他待办
 
-- [ ] 新 Claude 账号：上传 v0.11.0 的两个技能
+- [ ] 新 Claude 账号：按第六节安装插件并删除旧技能，确认插件能自动更新
 - [ ] 用户用真实需求试用，根据反馈继续精简
 - [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
 - [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则
