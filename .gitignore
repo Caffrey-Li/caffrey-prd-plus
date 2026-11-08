@@ -1,0 +1,11 @@
+# 临时文件（执行完删除，见 AGENTS.md）
+.tmp/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.DS_Store
+node_modules/
+test-results/
+playwright-report/
+*.zip

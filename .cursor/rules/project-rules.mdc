@@ -1,0 +1,6 @@
+---
+description: 项目规则：开始前读交接文档，执行完清理文件并更新交接文档
+alwaysApply: true
+---
+
+按仓库根目录 `AGENTS.md` 执行：开始前先读 `docs/HANDOFF.md`；每次执行完，删除本次产生的不需要的文件，更新 `docs/HANDOFF.md`，再提交推送。

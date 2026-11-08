@@ -1,13 +1,13 @@
 # caffrey-prd-plus 交接文档
 
-更新：2026-11-07，接手方为 Codex，当前版本 **v0.11.0**。新对话接手时先读本文件，再读仓库中的 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
+更新：2026-11-08，接手方为 Codex 和 Claude，当前版本 **v0.11.0**。新对话接手时先读根目录 `AGENTS.md`（所有 Agent 共用的项目规则）和本文件，再读 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
 
 ## 一、项目是什么
 
 给产品经理用的开源技能包（MIT），作者 caffrey neal（GitHub：Caffrey-Li）。
 
 - 仓库：https://github.com/Caffrey-Li/caffrey-prd-plus （公开，main 分支）
-- 用户电脑上的工作目录：`~/Projects/Caffrey-PRD/caffrey-prd-plus/`（与仓库一致）
+- 用户电脑上的工作目录：`~/Projects/Caffrey-PRD/caffrey-prd-plus/`（git 仓库，唯一的工作目录，不要另建克隆）
 - 两个技能：
 
 | 技能 | 作用 |
@@ -19,10 +19,11 @@
 
 | 项目 | 状态 |
 | --- | --- |
-| GitHub | v0.11.0（提交推送后） |
-| 用户电脑 | 新克隆仓库 v0.11.0；原有项目文件夹未覆盖 |
+| GitHub | v0.11.0 |
+| 用户电脑 | `caffrey-prd-plus` 已合并为 v0.11.0 的 git 仓库；`caffrey-prd-plus-git` 已删除 |
 | 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
-| 接手方 | Codex（2026-11-07 起），仓库根目录 `AGENTS.md` 是给它的入口 |
+| 接手方 | Codex（2026-11-07 起）和新 Claude 账号交替开发；入口为 `AGENTS.md`，Claude Code 读 `CLAUDE.md`，Cursor 读 `.cursor/rules/`，都指向它；Grok Bot 用 `docs/GROK-BOT-PROMPT.md` |
+| 新 Claude 账号 | 已拿到 v0.6.0 技能 zip，需换成 v0.11.0；GitHub 授权进行中 |
 
 ## 三、核心设计（已和用户确认，改动前先问）
 
@@ -45,10 +46,13 @@ skills/caffrey-prd-plus/       SKILL.md、VERSION、references/（模版、版�
 skills/caffrey-test-runner/    SKILL.md、VERSION、references/（用例格式、各端执行指南、结果格式、转 Playwright）、assets/playwright/、scripts/pw_results.js
 dist/caffrey-prd-plus-prompt.md  单文件版（只含 PRD 技能），由脚本生成，不要手改
 scripts/                       install.sh（一键安装）、release.py（发版）、build_single.py（生成单文件版）
-mcp/                           本地 MCP 服务与使用说明
+mcp/                           本地 MCP 服务（server.py）、本机 HTTP 预览（http_server.py）与使用说明
+tests/                         单元测试：python3 -m pytest -q tests
 .claude-plugin/、.cursor-plugin/ 插件清单（隐藏文件夹）
 examples/                      同一需求的完整版 / 核心版 / 精简版示例（example-psych-booking*.md）、精简版小需求示例、新产品总纲示例、全包样例 bundle-lite-filter/、测试用例样例、原型图样例、demo/
-docs/                          install.md（安装说明）、HANDOFF.md（本文件）
+docs/                          install.md（安装说明）、HANDOFF.md（本文件）、START-PROMPT.md（Claude 开场提示词）、CODEX-START-PROMPT.md、GROK-BOT-PROMPT.md
+AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、.cursor/rules/ 指向它
+.gitignore                     忽略临时文件（.tmp/、zip、缓存等）
 ```
 
 ## 五、发版流程
@@ -58,17 +62,18 @@ docs/                          install.md（安装说明）、HANDOFF.md（本�
 3. 运行 `python3 scripts/release.py X.Y.Z`：同步两个技能的 VERSION、插件清单版本号，重新生成单文件版。
 4. 检查：线框图格式（行首只能是 ┌│├└，横线 32 / 60）、表格列数一致、文件引用都存在。
 5. 提交并推送 main。Claude 会话的提交作者用 `Claude <noreply@anthropic.com>`；Codex 等其他工具用用户本机的 git 身份。
-6. 给 Claude 网页 / 桌面版用户打技能 zip：在 `skills/` 下分别把 `caffrey-prd-plus`、`caffrey-test-runner` 文件夹各压成一个 zip。
-7. 同步用户电脑上的项目文件夹（该文件夹不允许删除文件：先在 `$HOME` 生成 zip，再复制进去解压覆盖）。
+6. 给 Claude 网页 / 桌面版用户打技能 zip：在 `skills/` 下分别把 `caffrey-prd-plus`、`caffrey-test-runner` 文件夹各压成一个 zip，放在仓库外。
+7. 推送不是在用户电脑上做的（如 Claude 云端会话），在用户电脑的项目文件夹中 `git pull`。
+8. 按 `AGENTS.md` 清理本次产生的临时文件，更新本文件。
 
 ## 六、注意事项
 
-- **推送 GitHub**：需要新账号授权（Claude 的 GitHub 应用或 claude.ai 中连接 GitHub）。没有授权时只能让用户手动上传；网页拖拽上传会丢掉隐藏文件夹 `.claude-plugin`、`.cursor-plugin`，这两个文件夹里的文件要在 GitHub 网页上用“Create new file / 编辑”逐个改。
+- **推送 GitHub**：Codex 用用户本机的 git 身份推送。Claude 需要在 claude.ai「设置 → 连接器」连接 GitHub 并授权本仓库；Claude 会话中用户电脑的 shell 连不上 GitHub。没有授权时只能让用户手动上传；网页拖拽上传会丢掉隐藏文件夹 `.claude-plugin`、`.cursor-plugin`，这两个文件夹里的文件要在 GitHub 网页上用“Create new file / 编辑”逐个改。
 - **更新 Claude 里的技能**：只能上传 zip。替用户上传需要 Chrome 的 Claude 扩展在线；“生成技能确认卡片”只能替换 SKILL.md，不能更新参考文件，不要用。
 - **云端环境**：npm 可能被网络策略拦截；预装了 Playwright 1.63。`mmdc` 不要加 `-p` 参数，加了会找不到浏览器。
 - **验证示例**：把示例 PRD 正文放进临时目录的 `pages/`，运行 `python3 skills/caffrey-prd-plus/scripts/make_bundle.py <目录> --no-zip`，脚本会渲染 Mermaid、检查所有链接；再用 Playwright 截图看 `preview.html`。
 - **Mermaid 状态图**：一个对象一张图，嵌套画多个对象时同名状态会被合并。
-- **用户电脑文件夹**：不能删除文件，zip 不能直接在里面生成（会报 Operation not permitted），先在 `$HOME` 生成再复制；多余文件移到 `_to_delete/`。上一次同步方式：在用户电脑的 shell 中从 GitHub 下载 main 的 tar 包，解压到 `$HOME/src`，再 `cp -R` 覆盖到项目文件夹。
+- **用户电脑文件夹**：Claude 会话里默认不能删除文件，需要时先向用户申请删除权限；未获权限时多余文件移到 `~/Projects/Caffrey-PRD/_to_delete/`。
 
 ## 七、正在进行：插件化，让各个 Agent 接入
 
@@ -91,7 +96,7 @@ docs/                          install.md（安装说明）、HANDOFF.md（本�
 
 ## 八、其他待办
 
-- [ ] 在新账号的 Claude 中上传 v0.8.1 的两个技能
+- [ ] 新 Claude 账号：连接 GitHub；上传 v0.11.0 的两个技能
 - [ ] 用户用真实需求试用，根据反馈继续精简
 - [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
 - [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则
