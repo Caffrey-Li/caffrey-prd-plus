@@ -23,7 +23,7 @@ python3 -m pip install -r mcp/requirements.txt
 
 将路径换成实际位置；各客户端配置入口和格式可能不同，需参考各客户端文档。本服务使用仓库内的 `skills/`，移动或删除仓库会导致服务不可用。
 
-提供 `start_prd`、`get_questions`、`get_reference`、`check_prd`、`build_bundle` 五个工具，以及新建 PRD、修改 PRD、生成测试用例、执行测试四个提示词。问题库由 Agent 按材料筛选并拟建议答案；检查工具只检查部分待定词、编号链接、括号和字段表，结果可能误报，不能代表 PRD 完整合格。`build_bundle` 会在指定的本地目录写入文件并生成 ZIP，需要图表渲染工具；交付前仍要按技能规范验证预览。
+提供 `start_prd`、`get_questions`、`get_reference`、`check_prd`、`build_bundle` 五个工具，以及新建 PRD、修改 PRD、检查 PRD、生成测试用例、执行测试五个提示词。问题库由 Agent 按材料筛选并拟建议答案；检查工具只检查部分待定词、编号链接、括号和字段表，结果可能误报，不能代表 PRD 完整合格。`build_bundle` 会在指定的本地目录写入文件并生成 ZIP，需要图表渲染工具；交付前仍要按技能规范验证预览。
 
 使用 Python SDK 的客户端完成了本地协议测试。Claude、Codex、Cursor、Muse、WorkBuddy、Trae、Grok Bot、Coze 和飞书智能伙伴尚未逐一实测；网页平台需要另行实现并验证远程接入。本地服务不直接操作被测网站或替代有浏览器操作能力的测试 Agent。
 

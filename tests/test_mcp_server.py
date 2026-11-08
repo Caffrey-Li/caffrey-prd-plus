@@ -23,7 +23,9 @@ class MCPServerTest(unittest.TestCase):
             async with Client(params) as client:
                 tools = {tool.name for tool in (await client.list_tools()).tools}
                 self.assertEqual(tools, {'start_prd', 'get_questions', 'get_reference', 'check_prd', 'build_bundle'})
-                self.assertEqual(len((await client.list_prompts()).prompts), 4)
+                self.assertEqual({p.name for p in (await client.list_prompts()).prompts}, {'write_prd', 'update_prd', 'review_prd', 'create_test_cases', 'execute_tests'})
+                review = await client.call_tool('get_reference', {'path': 'prd/references/prd-review.md'})
+                self.assertIn('检查核对已有 PRD', review.content[0].text)
                 ref = await client.call_tool('get_reference', {'path': 'prd/references/prd-template.md'})
                 self.assertFalse(ref.is_error)
                 self.assertIn('PRD 核心模版', ref.content[0].text)

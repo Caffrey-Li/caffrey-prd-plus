@@ -45,10 +45,27 @@ const passRate = executed ? Math.round((count('通过') / executed) * 100) : 0;
 const failedFeatures = [...new Set(rows.filter((r) => r.result === '失败').map((r) => r.feature))].join('、') || '无';
 const esc = (s) => String(s).replace(/\|/g, '\\|');
 
+// 上线结论初判（规则见 references/results.md 第二节）。脚本不知道缺陷严重程度，
+// 由执行 Agent 按缺陷单复核：有致命、严重缺陷时改为“不建议上线”。
+const p0 = rows.filter((r) => r.priority === 'P0');
+const p0Passed = p0.filter((r) => r.result === '通过').length;
+const notRun = rows.filter((r) => r.result !== '通过' && r.result !== '失败');
+const failed = rows.filter((r) => r.result === '失败');
+let verdict;
+if (p0.some((r) => r.result === '失败')) verdict = '不建议上线';
+else if (p0.some((r) => r.result !== '通过')) verdict = '无法判定';
+else if (failed.length || notRun.length) verdict = '有条件上线';
+else verdict = '建议上线';
+const verdictBasis = `P0 共 ${p0.length} 条，通过 ${p0Passed}；失败 ${failed.length} 条；未执行的用例 ${notRun.length} 条`;
+const todo = [...failed.map((r) => `${r.id} 失败`), ...notRun.map((r) => `${r.id} ${r.result}`)].join('；');
+
 const md = [
   '## 测试结果', '',
   `- 来源：Playwright 报告 ${path.basename(input)}`,
   `- 执行时间：${report.stats && report.stats.startTime ? report.stats.startTime : ''}`, '',
+  `**上线结论（初判，待按缺陷严重程度复核）：${verdict}**`,
+  `- 依据：${verdictBasis}`,
+  ...(todo ? [`- 上线前要确认：${todo}`] : []), '',
   '| 用例编号 | 关联功能 | 优先级 | 结果 | 实际结果 | 证据 | 备注 |',
   '| --- | --- | --- | --- | --- | --- | --- |',
   ...rows.map((r) => `| ${r.id} | ${r.feature} | ${r.priority} | ${r.result} | ${esc(r.actual)} | ${r.evidence || '—'} | ${r.failedAt && r.result !== '通过' ? '失败于 ' + r.failedAt : ''} |`),
@@ -59,6 +76,8 @@ const md = [
 
 const yaml = [
   `source: ${path.basename(input)}`,
+  `verdict: ${verdict}`,
+  `verdict_basis: ${JSON.stringify(verdictBasis)}`,
   'results:',
   ...rows.flatMap((r) => [
     `  - id: ${r.id}`,

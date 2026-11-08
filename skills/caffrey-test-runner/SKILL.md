@@ -1,6 +1,6 @@
 ---
 name: caffrey-test-runner
-description: 测试执行助手。按测试用例在 Web（浏览器）、App、Mac / Windows 应用、小程序上逐条执行测试，截图留证，回填结果表，把失败整理成缺陷单；支持只重跑失败用例、把用例转成 Playwright 等自动化脚本。用例来自 caffrey-prd-plus 生成的可执行 YAML，也可以是飞书测试用例表。当用户说执行测试用例、跑用例、提测验证、冒烟测试、回归测试、重跑失败用例、把用例转成自动化脚本时使用。不用于写 PRD 或生成测试用例。
+description: 测试执行助手。按测试用例在 Web（浏览器）、App、Mac / Windows 应用、小程序上逐条执行测试，截图留证，回填结果表，把失败整理成缺陷单，并给出上线结论（建议上线 / 有条件上线 / 不建议上线 / 无法判定）；支持只重跑失败用例、把用例转成 Playwright 等自动化脚本。用例来自 caffrey-prd-plus 生成的可执行 YAML，也可以是飞书测试用例表。当用户说执行测试用例、跑用例、提测验证、按线上地址测一下、能不能上线、冒烟测试、回归测试、重跑失败用例、把用例转成自动化脚本时使用。不用于写 PRD 或生成测试用例。
 metadata:
   author: caffrey neal
   short-description: 按测试用例执行测试并回填结果
@@ -16,7 +16,7 @@ metadata:
 | --- | --- | --- |
 | 执行用例 | “按这个用例跑一遍”“提测了，测一下”“跑一下 P0 冒烟” | 本文件「执行流程」 |
 | 重跑 | “只重跑失败的”“修好了，再测 TC-003” | 本文件「重跑」 |
-| 整理缺陷 | “把失败的整理成缺陷单” | `references/results.md` 第三节 |
+| 整理缺陷 | “把失败的整理成缺陷单” | `references/results.md` 第四节 |
 | 转脚本 | “转成 Playwright 脚本”“做成自动化回归” | `references/export-playwright.md`；App、小程序见对应端的指南 |
 
 ## 执行流程
@@ -82,12 +82,12 @@ metadata:
 
 ### 第 4 步：输出结果
 
-按 `references/results.md` 输出：结果表、统计、失败用例的缺陷单草稿、疑似需要更新的用例。能写文件时同时保存到 `test-results/<运行编号>/`。
+按 `references/results.md` 输出：上线结论（第二节，放在最前面）、结果表、统计、失败用例的缺陷单草稿、疑似需要更新的用例。能写文件时同时保存到 `test-results/<运行编号>/`。
 
 ## 重跑
 
 1. 读取上一次的 `results.yaml`（或用户贴出的结果表），默认只重跑“失败”和“阻塞”的用例；用户指定编号时按指定的跑。
-2. 用新的运行编号保存结果，结果表增加一列“上次结果”，例如“失败 → 通过”。
+2. 用新的运行编号保存结果，结果表增加一列“上次结果”，例如“失败 → 通过”；按全部用例的最新结果重新给出上线结论。
 3. 重跑前同样做第 2 步的执行前确认，内容可以简化为“将重跑哪些用例、环境是否不变”。
 
 ## 写作与执行铁律
@@ -111,7 +111,7 @@ metadata:
 | `references/app.md` | App 端：Maestro、模拟器 + computer use |
 | `references/desktop.md` | Mac、Windows 应用：computer use、Electron 应用 |
 | `references/miniprogram.md` | 小程序：微信开发者工具自动化 |
-| `references/results.md` | 结果表、结果文件、缺陷单格式 |
+| `references/results.md` | 上线结论判定、结果表、结果文件、缺陷单格式 |
 | `references/export-playwright.md` | 把用例转成 Playwright 脚本 |
 | `assets/playwright/` | Playwright 配置和辅助函数模板（转脚本时复制） |
 | `scripts/pw_results.js` | 把 Playwright 的 JSON 报告转成结果表和 results.yaml |

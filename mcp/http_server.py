@@ -9,7 +9,7 @@ import server
 http = MCPServer('caffrey-prd-plus-http-preview')
 for tool in (server.start_prd, server.get_questions, server.get_reference, server.check_prd):
     http.tool()(tool)
-for prompt in (server.write_prd, server.update_prd, server.create_test_cases, server.execute_tests):
+for prompt in (server.write_prd, server.update_prd, server.review_prd, server.create_test_cases, server.execute_tests):
     http.prompt()(prompt)
 
 

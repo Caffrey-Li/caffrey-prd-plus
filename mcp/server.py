@@ -113,15 +113,21 @@ def update_prd() -> str:
 
 
 @mcp.prompt()
+def review_prd() -> str:
+    """检查核对已有 PRD。"""
+    return '请调用 get_reference 读取 prd/references/prd-review.md，按四个维度检查用户提供的 PRD 并输出检查报告；本技能模版写的 PRD 可再调用 check_prd 辅助检查。用户确认后再出修订版。'
+
+
+@mcp.prompt()
 def create_test_cases() -> str:
-    """根据定稿 PRD 生成测试用例和方案。"""
-    return '请调用 get_reference 读取 prd/references/test-cases.md 和 prd/references/test-plan.md，按定稿 PRD 生成用例和网页 Agent 测试方案。'
+    """根据定稿或已有 PRD 生成测试用例和方案。"""
+    return '请调用 get_reference 读取 prd/references/test-cases.md、prd/references/test-plan.md 和 prd/references/prd-review.md，先列出影响测试的缺口请用户确认，再按 PRD 生成用例和网页 Agent 测试方案。'
 
 
 @mcp.prompt()
 def execute_tests() -> str:
     """按测试执行技能运行测试。"""
-    return '请调用 get_reference 读取 runner/SKILL.md 和目标端指南，确认环境、数据、工具与执行范围并取得用户确认后逐条执行。'
+    return '请调用 get_reference 读取 runner/SKILL.md、runner/references/results.md 和目标端指南，确认被测地址、环境、数据、工具与执行范围并取得用户确认后逐条执行，先给出上线结论，再输出结果表和缺陷单。'
 
 
 if __name__ == '__main__':

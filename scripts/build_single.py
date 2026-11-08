@@ -26,6 +26,7 @@ ORDER = [
     "references/industries/*.md",
     "references/question-bank.md",
     "references/quality-checklist.md",
+    "references/prd-review.md",
     "references/change-management.md",
     "references/user-stories.md",
     "references/test-cases.md",

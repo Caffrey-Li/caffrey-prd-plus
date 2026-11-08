@@ -1,6 +1,6 @@
 ---
 name: caffrey-prd-plus
-description: 产品经理的 PRD 助手。把一句话、会议纪要、截图或旧文档整理成开发可直接执行的中文 PRD，配线框图、流程图、用户路径图、信息流转图和时序图，支持 20 类需求类型和行业检查包；整个新产品会先出产品总纲再按模块出 PRD；也用于迭代已有 PRD 并记录变更、拆解用户故事、在 PRD 定稿后生成测试用例；用户要求时按 PRD 出可点击的 HTML 原型图。当用户提到 PRD、需求文档、产品需求、需求整理、需求评审、用户故事、测试用例、按 PRD 出原型图时使用。不用于写技术设计文档或代码。
+description: 产品经理的 PRD 助手。把一句话、会议纪要、截图或旧文档整理成开发可直接执行的中文 PRD，配线框图、流程图、用户路径图、信息流转图和时序图，支持 20 类需求类型和行业检查包；整个新产品会先出产品总纲再按模块出 PRD；也用于迭代已有 PRD 并记录变更、检查核对已有 PRD（包括别人写的、其他格式的）、拆解用户故事、根据定稿或已有 PRD 生成测试用例和测试方案；用户要求时按 PRD 出可点击的 HTML 原型图。当用户提到 PRD、需求文档、产品需求、需求整理、需求评审、检查或核对 PRD、用户故事、测试用例、测试方案、按 PRD 出原型图时使用。不用于写技术设计文档或代码。
 metadata:
   author: caffrey neal
   short-description: 生成、迭代、拆解中文 PRD
@@ -12,7 +12,7 @@ metadata:
 
 所有输出使用中文。所有引用的文件路径都相对于本 SKILL.md 所在目录。
 
-## 六种模式
+## 七种模式
 
 根据用户的话判断进入哪种模式；判断不了就问一句。
 
@@ -21,8 +21,9 @@ metadata:
 | 新建 PRD | “帮我写个 PRD”“整理一下这个需求” | 本文件「新建流程」 |
 | 新产品 | “做一个类似 XX 的产品”“从零做一个平台” | 先走新建流程第 1、2 步，再按 `references/new-product-mode.md` |
 | 更新 PRD | “这个 PRD 要改一下”“加个功能”“出 v1.2” | `references/change-management.md` |
+| 检查 PRD | “检查一下这个 PRD”“评审 / 核对这份 PRD”“这个 PRD 有什么问题” | `references/prd-review.md`：先出检查报告，确认后再出修订版 |
 | 拆用户故事 | “拆成用户故事”“拆一下需求” | `references/user-stories.md` |
-| 生成测试用例 | “出测试用例”“出测试方案” | `references/test-cases.md`、`references/test-plan.md`：输出表格、可执行 YAML 和 Agent 测试方案 |
+| 生成测试用例 | “出测试用例”“出测试方案”“根据这份 PRD 出用例” | `references/test-cases.md`、`references/test-plan.md`：PRD 可以是本技能写的定稿，也可以是已有的其他格式；先列影响测试的缺口确认，再输出表格、可执行 YAML 和 Agent 测试方案 |
 | 出原型图 | “出原型图”“画个原型”“做个能点的原型” | `references/prototype.md`：只在用户要求时出 |
 
 ## 版本检查（每个对话只做一次）
@@ -170,6 +171,7 @@ PRD 是开发和测试照着执行的最终文档，**正文里不能出现任�
 | `references/industries/_index.md` | 行业包的识别方法与文件对照 |
 | `references/question-bank.md` | 按章节组织的追问题库 |
 | `references/quality-checklist.md` | 生成后的自检清单 |
+| `references/prd-review.md` | 检查核对已有 PRD：四个维度、检查报告、修订版 |
 | `references/change-management.md` | 更新模式：版本号、变更记录、正文标记 |
 | `references/user-stories.md` | 用户故事拆解格式 |
 | `references/test-cases.md` | 测试用例：生成前置条件、飞书表格、agent 可执行 YAML、结果回填格式 |

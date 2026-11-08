@@ -1,6 +1,6 @@
 # caffrey-prd-plus 交接文档
 
-更新：2026-11-08，接手方为 Codex 和 Claude，当前版本 **v0.11.0**。新对话接手时先读根目录 `AGENTS.md`（所有 Agent 共用的项目规则）和本文件，再读 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
+更新：2026-11-08，接手方为 Codex 和 Claude，当前版本 **v0.12.0**。新对话接手时先读根目录 `AGENTS.md`（所有 Agent 共用的项目规则）和本文件，再读 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
 
 ## 一、项目是什么
 
@@ -12,18 +12,18 @@
 
 | 技能 | 作用 |
 | --- | --- |
-| `caffrey-prd-plus` | 把需求整理成中文 PRD；新产品先出总纲再分模块；迭代变更；拆用户故事；定稿后出测试用例；按需出原型图 |
-| `caffrey-test-runner` | 按 YAML 测试用例在 Web / App / 桌面应用 / 小程序上执行测试，出结果表和缺陷单，可转 Playwright 脚本 |
+| `caffrey-prd-plus` | 把需求整理成中文 PRD；新产品先出总纲再分模块；迭代变更；检查核对已有 PRD；拆用户故事；根据定稿或已有 PRD 出测试用例和测试方案；按需出原型图 |
+| `caffrey-test-runner` | 按 YAML 测试用例在 Web / App / 桌面应用 / 小程序上执行测试，给出上线结论，出结果表和缺陷单，可转 Playwright 脚本 |
 
 ## 二、当前状态
 
 | 项目 | 状态 |
 | --- | --- |
-| GitHub | v0.11.0 |
-| 用户电脑 | `caffrey-prd-plus` 已合并为 v0.11.0 的 git 仓库；`caffrey-prd-plus-git` 内容已删除，空文件夹由用户删除 |
+| GitHub | v0.12.0 |
+| 用户电脑 | `caffrey-prd-plus` 是 v0.12.0 的 git 仓库；`caffrey-prd-plus-git` 内容已删除，空文件夹由用户删除 |
 | 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
 | 接手方 | Codex（2026-11-07 起）和新 Claude 账号交替开发；入口为 `AGENTS.md`，Claude Code 读 `CLAUDE.md`，Cursor 读 `.cursor/rules/`，都指向它；Grok Bot 用 `docs/GROK-BOT-PROMPT.md` |
-| 新 Claude 账号 | 已连接 GitHub，可推送；已给 v0.11.0 技能 zip，建议改为插件安装（见第六节） |
+| 新 Claude 账号 | 已连接 GitHub，可推送；已给 v0.12.0 技能 zip，建议改为插件安装（见第六节） |
 
 ## 三、核心设计（已和用户确认，改动前先问）
 
@@ -31,11 +31,12 @@
 2. **第 1 步必须停下让用户选**：文档版本（精简 / 核心 / 完整，默认推荐精简）、19 个板块（可增减）、交付方式（全包 / 只要文本）。
    **第 2 步先确认再写**（v0.7.0）：列出所有不确定的信息，附建议答案，一轮最多 8 个，全部确认才写；确认不了的放进“本期不做”。文档直接是 v1.0。
 3. **定稿后询问**：PRD 定稿后询问是否一起生成测试用例和 Agent 测试方案，用户确认后生成；原型图只在用户要求时出。
+   **已有 PRD**（v0.12.0）：可检查核对别人写的、其他格式的 PRD，先出检查报告（完整性、确定性、一致性、可测试性，结论为能否进入开发），用户确认后再出修订版，可保持原格式或改写成本模版；可根据已有 PRD 生成用例和方案，先列影响测试的缺口附建议答案确认，确认不了的列为未覆盖。
 4. **写作要求**（v0.7.0）：正文不出现 TBD、待确认、待补充、不适用、暂无；不用括号补充，不写再次说明；每类内容只写在一处，其他地方用编号链接 `[R-01](#R-01)`（F- 功能、R- 规则、G- / I- 规范、D- / E- 字段与枚举、S- 场景）；没有内容就删除；PRD 后不附自检和问题清单。
 5. **PRD 结构**：标题、一句话、需求变更记录，然后一至十五章 + 附录，没有“零”；编号固定。第一章先写定位；目标必须达成，写达成时间。字段表必填列只写是 / 否，文本等类型必须写长度 / 格式，预览带斑马纹（v0.8.0）。上线计划、里程碑只写用户提供的，没有就不写（v0.8.1）。8.4 每个页面固定为：线框图 → 入口 → 操作与规则 → 字段与组件。
 6. **线框图**：只用黑白灰、以骨架为主。只要文本时用文本线框图（`text` 代码块、只画左边框、横线手机 32 / 电脑 60）；全包时用灰度 SVG 转 PNG。编号 ①②③ 对应「操作与规则」。
 7. **全包交付**：`pages/*.md` + `images/`（线框图 PNG、diagram-XX-YY.png）+ `preview.html`（链接跳转、悬停显示内容、返回按钮）+ `manifest.yaml`（Wiki 层级、图、编号）+ `IMPORT.md`，脚本检查链接并在图渲染失败时报错；交付前检查预览交互。不能完成时说明缺口，输出完整可复制内容并转交能打包的 Agent。
-8. **测试用例**：飞书表格 + agent 可执行 YAML（meta / env / data / run_rules / cases；元素写成“类型「文案」”；环境值用 `${变量}`；`ENV_TYPE` 为生产时只跑 `prod_safe` 用例）+ Agent 测试方案；方案先覆盖网页，从 PRD 预期出发操作实际页面并输出测试报告。
+8. **测试用例**：飞书表格 + agent 可执行 YAML（meta / env / data / run_rules / cases；元素写成“类型「文案」”；环境值用 `${变量}`；`ENV_TYPE` 为生产时只跑 `prod_safe` 用例）+ Agent 测试方案；方案先覆盖网页，从 PRD 预期出发操作实际页面并输出测试报告。测试结果最前面给出上线结论（v0.12.0）：不建议上线（P0 失败或有致命 / 严重缺陷）→ 无法判定（P0 未执行完）→ 有条件上线（只剩一般 / 轻微缺陷或 P1、P2 未执行）→ 建议上线（全部通过、无缺陷），按顺序命中第一条。
 9. **行业包**：游戏娱乐、风电能源、心理咨询、服务行业、AI 服务；法规类检查项在第 2 步请用户和法务确认，任何版本都不能省。
 10. **平台**：Grok Bot 用单文件版（`dist/`）；Claude Code、Codex、Cursor、DeepSeek Harness、Grok Build、WorkBuddy 用一键脚本或插件；Claude 网页 / 桌面版上传技能 zip。
 
@@ -71,7 +72,8 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 - **推送 GitHub**：Codex 用用户本机的 git 身份推送。Claude 需要在 claude.ai「设置 → 连接器」连接 GitHub 并授权本仓库；Claude 会话中用户电脑的 shell 连不上 GitHub。没有授权时只能让用户手动上传；网页拖拽上传会丢掉隐藏文件夹 `.claude-plugin`、`.cursor-plugin`，这两个文件夹里的文件要在 GitHub 网页上用“Create new file / 编辑”逐个改。
 - **更新 Claude 里的技能**：推荐把仓库作为插件安装：Claude 网页 / 桌面版在「Customize → Plugins → Add → Add marketplace → Add from a repository」填 `Caffrey-Li/caffrey-prd-plus`；Claude Code 用 `/plugin marketplace add Caffrey-Li/caffrey-prd-plus`，第三方市场默认不自动更新，需在 `/plugin` 的 Marketplaces 中开启 Enable auto-update。插件按 `plugin.json` 的 `version` 判断是否有更新，只改文件不升版本号不会更新。装插件后删除手动上传的同名技能。不装插件时只能上传 zip；“生成技能确认卡片”只能替换 SKILL.md，不能更新参考文件，不要用。
 - **“插件化”与插件安装是两件事**：第七节的插件化指 MCP 服务，给 Coze、飞书等不能读技能的 Agent 用；Claude、Codex、Cursor 直接装技能或插件。
-- **云端环境**：npm 可能被网络策略拦截；预装了 Playwright 1.63。`mmdc` 不要加 `-p` 参数，加了会找不到浏览器。
+- **云端环境**：npm 可能被网络策略拦截；预装了 Playwright 1.63（`/opt/npm-tools/node_modules/playwright`，没有 `@playwright/test` 包）。`mmdc` 不要加 `-p` 参数，加了会找不到浏览器。
+- **跑演示测试**：把 `examples/demo/playwright/` 和 `lite-filter-demo.html` 复制到临时目录；没有 `@playwright/test` 时，在临时目录的 `node_modules/` 下链接 `playwright`、`playwright-core`，并建一个 `@playwright/test` 包导出 `require('playwright/test')`；设好 `ENTRY`（加 `?bug=1` 开启埋的缺陷）、`ENV_TYPE`、`COUNSELOR_TODAY`、`COUNSELOR_NOT_TODAY`、`TAG_OF_TODAY`，运行 `node node_modules/playwright/cli.js test`，再用 `pw_results.js` 转结果。预期：有缺陷时“有条件上线”，无缺陷时“建议上线”。
 - **验证示例**：把示例 PRD 正文放进临时目录的 `pages/`，运行 `python3 skills/caffrey-prd-plus/scripts/make_bundle.py <目录> --no-zip`，脚本会渲染 Mermaid、检查所有链接；再用 Playwright 截图看 `preview.html`。
 - **Mermaid 状态图**：一个对象一张图，嵌套画多个对象时同名状态会被合并。
 - **用户电脑文件夹**：Claude 会话里默认不能删除文件，需要时先向用户申请删除权限；未获权限时多余文件移到 `~/Projects/Caffrey-PRD/_to_delete/`。
@@ -100,7 +102,8 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 - [ ] 新 Claude 账号：按第六节安装插件并删除旧技能，确认插件能自动更新
 - [ ] 用户用真实需求试用，根据反馈继续精简
 - [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
-- [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则
+- [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则，验证上线结论（用户暂时没有可用地址）
+- [ ] 用一份真实的已有 PRD 试用“检查 PRD”和“根据已有 PRD 出用例”
 - [ ] 实测 WorkBuddy、Cursor 的安装方式，修正 docs/install.md
 - [ ] 考虑建 GitHub Release，附两个技能 zip 和单文件版
 

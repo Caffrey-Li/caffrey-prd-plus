@@ -7,9 +7,10 @@
 - **新建 PRD**：输入一句话、会议纪要、截图或旧文档。第 1 步选文档版本、板块和交付方式；第 2 步逐轮确认所有不确定的信息，每个问题附建议答案；确认完直接写出 v1.0。原型图、测试用例等你需要时再出。
 - **新产品模式**：碰到“做一个类似 XX 的产品”这类完整新产品，先出产品总纲（定位、竞品、模块地图、核心对象、MVP 与路线图），再按模块逐个出详细 PRD。
 - **迭代 PRD**：按版本号规则修改已有 PRD，自动记录变更、在正文标记改动、提醒需要重新确认的人。
+- **检查 PRD**：检查核对已有 PRD，包括别人写的、其他格式的。按完整性、确定性、一致性、可测试性出检查报告，给出能否进入开发的结论；你确认后再出修订版。
 - **拆用户故事**：按功能编号拆成“作为……我想要……以便……”的用户故事和验收条件。
-- **执行测试**（技能 `caffrey-test-runner`）：提测后按 YAML 用例逐条执行，截图留证，输出结果表和缺陷单，支持只重跑失败用例、转成 Playwright 脚本做自动化回归。Web 端开箱可用；App、Mac / Windows 应用、小程序附执行指南。
-- **生成测试用例**：PRD 定稿后，按验收标准和字段表生成两份用例：可粘贴到飞书表格的版本，和测试 agent 能直接逐条执行、回填结果的 YAML 版本。
+- **执行测试**（技能 `caffrey-test-runner`）：开发完成后提供被测地址，按 YAML 用例逐条执行，截图留证，给出上线结论（建议上线 / 有条件上线 / 不建议上线 / 无法判定），输出结果表和缺陷单，支持只重跑失败用例、转成 Playwright 脚本做自动化回归。Web 端开箱可用；App、Mac / Windows 应用、小程序附执行指南。
+- **生成测试用例和测试方案**：PRD 定稿后，或给出一份已有 PRD，先列出影响测试的缺口请你确认，再按验收标准和字段表生成：可粘贴到飞书表格的用例、测试 agent 能直接逐条执行的 YAML 用例，以及交给测试 agent 的测试方案。
 
 ## 特点
 
@@ -62,6 +63,7 @@ curl -fsSL https://raw.githubusercontent.com/Caffrey-Li/caffrey-prd-plus/main/sc
 - `example-psych-booking-core.md`、`example-psych-booking-lite.md`：同一需求的核心版和精简版，方便对比三个版本
 - `example-lite-filter.md`：精简版（咨询师列表加一个筛选开关）
 - `example-test-cases.md`、`example-test-cases.yaml`：上面精简版需求的测试用例（飞书表格 + 可执行 YAML）
+- `example-prd-review.md`：检查一份其他格式的已有 PRD 得到的检查报告
 - `bundle-lite-filter/`：精简版需求的全包交付样例（页面、线框图和流程图 PNG、HTML 预览、manifest、导入说明）
 - `demo/`：可以直接试跑测试技能的演示页面、填好环境的用例、转好的 Playwright 脚本和一份执行结果样例
 - `prototype-psych-booking.html`：同一个需求的原型图样例（用浏览器打开）
@@ -87,7 +89,9 @@ skills/caffrey-prd-plus/      技能文件夹（安装这个）
     quality-checklist.md      自检清单
     change-management.md      版本迭代与变更记录
     user-stories.md           用户故事格式
+    prd-review.md             检查核对已有 PRD
     test-cases.md             测试用例（飞书表格 + 可执行 YAML）
+    test-plan.md              交给测试 agent 的测试方案
   VERSION                     当前版本号
 skills/caffrey-test-runner/   测试执行技能
   SKILL.md                    执行流程与铁律
