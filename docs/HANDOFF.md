@@ -64,6 +64,7 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 4. 检查：线框图格式（行首只能是 ┌│├└，横线 32 / 60）、表格列数一致、文件引用都存在。
 5. 提交并推送 main。Claude 会话的提交作者用 `Claude <noreply@anthropic.com>`；Codex 等其他工具用用户本机的 git 身份。
 6. 给 Claude 网页 / 桌面版用户打技能 zip：在 `skills/` 下分别把 `caffrey-prd-plus`、`caffrey-test-runner` 文件夹各压成一个 zip，放在仓库外。
+   同时打插件包 `caffrey-prd-plus-plugin-vX.Y.Z.zip`：根目录放 `.claude-plugin/plugin.json`、`skills/`、`README.md`、`LICENSE`，用 `claude plugin validate <目录>` 校验通过再交付。技能 zip 不能当插件上传，会报 “Plugin failed validation”。
 7. 推送不是在用户电脑上做的（如 Claude 云端会话），在用户电脑的项目文件夹中 `git pull`。
 8. 按 `AGENTS.md` 清理本次产生的临时文件，更新本文件。
 
@@ -99,7 +100,7 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 
 ## 八、其他待办
 
-- [ ] 新 Claude 账号：按第六节安装插件并删除旧技能，确认插件能自动更新
+- [ ] 新 Claude 账号：上传插件包或从仓库安装插件，删除旧技能；确认能否通过校验、能否自动更新
 - [ ] 用户用真实需求试用，根据反馈继续精简
 - [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
 - [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则，验证上线结论（用户暂时没有可用地址）
