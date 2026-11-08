@@ -104,7 +104,7 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 - [ ] 用户用真实需求试用，根据反馈继续精简
 - [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
 - [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则，验证上线结论（用户暂时没有可用地址）
-- [ ] 用户 Mac：Node.js v22 已装，Playwright 浏览器缓存有旧版本；演示脚本因缺 Playwright 1.63 对应的浏览器而阻塞，待用户运行 `npx playwright install chromium` 或设置 `PW_CHANNEL=chrome` 后重跑。公司内网不能用 Claude，内网测试用 Cursor 在本机运行
+- [x] 用户 Mac 跑通演示脚本（2026-11-08）：Node.js v22；结果 6 通过 1 失败，结论“有条件上线”，与预期一致。公司内网不能用 Claude，内网测试用 Cursor 在本机运行
 - [ ] 用一份真实的已有 PRD 试用“检查 PRD”和“根据已有 PRD 出用例”
 - [ ] 实测 WorkBuddy、Cursor 的安装方式，修正 docs/install.md
 - [ ] 考虑建 GitHub Release，附两个技能 zip 和单文件版
