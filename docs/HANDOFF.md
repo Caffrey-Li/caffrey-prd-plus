@@ -20,10 +20,10 @@
 | 项目 | 状态 |
 | --- | --- |
 | GitHub | v0.11.0 |
-| 用户电脑 | `caffrey-prd-plus` 已合并为 v0.11.0 的 git 仓库；`caffrey-prd-plus-git` 已删除 |
+| 用户电脑 | `caffrey-prd-plus` 已合并为 v0.11.0 的 git 仓库；`caffrey-prd-plus-git` 内容已删除，空文件夹由用户删除 |
 | 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
 | 接手方 | Codex（2026-11-07 起）和新 Claude 账号交替开发；入口为 `AGENTS.md`，Claude Code 读 `CLAUDE.md`，Cursor 读 `.cursor/rules/`，都指向它；Grok Bot 用 `docs/GROK-BOT-PROMPT.md` |
-| 新 Claude 账号 | 已拿到 v0.6.0 技能 zip，需换成 v0.11.0；GitHub 授权进行中 |
+| 新 Claude 账号 | 已连接 GitHub，可推送；已拿到 v0.6.0 技能 zip，需换成 v0.11.0 |
 
 ## 三、核心设计（已和用户确认，改动前先问）
 
@@ -96,7 +96,7 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 
 ## 八、其他待办
 
-- [ ] 新 Claude 账号：连接 GitHub；上传 v0.11.0 的两个技能
+- [ ] 新 Claude 账号：上传 v0.11.0 的两个技能
 - [ ] 用户用真实需求试用，根据反馈继续精简
 - [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
 - [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则
