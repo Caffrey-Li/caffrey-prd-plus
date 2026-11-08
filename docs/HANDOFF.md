@@ -1,6 +1,6 @@
 # caffrey-prd-plus 交接文档
 
-更新：2026-11-08，接手方为 Codex 和 Claude，当前版本 **v0.12.0**。新对话接手时先读根目录 `AGENTS.md`（所有 Agent 共用的项目规则）和本文件，再读 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
+更新：2026-11-08，接手方为 Codex 和 Claude，当前版本 **v0.12.1**。新对话接手时先读根目录 `AGENTS.md`（所有 Agent 共用的项目规则）和本文件，再读 `CHANGELOG.md` 和两个技能的 `SKILL.md`。**正在进行的任务见第七节“插件化”。**
 
 ## 一、项目是什么
 
@@ -19,11 +19,11 @@
 
 | 项目 | 状态 |
 | --- | --- |
-| GitHub | v0.12.0 |
-| 用户电脑 | `caffrey-prd-plus` 是 v0.12.0 的 git 仓库；`caffrey-prd-plus-git` 内容已删除，空文件夹由用户删除 |
+| GitHub | v0.12.1 |
+| 用户电脑 | `caffrey-prd-plus` 是 v0.12.1 的 git 仓库；`caffrey-prd-plus-git` 内容已删除，空文件夹由用户删除 |
 | 上一个 Claude 账号 | 已装到 v0.8.1 前后的版本，额度用完，不再使用 |
 | 接手方 | Codex（2026-11-07 起）和新 Claude 账号交替开发；入口为 `AGENTS.md`，Claude Code 读 `CLAUDE.md`，Cursor 读 `.cursor/rules/`，都指向它；Grok Bot 用 `docs/GROK-BOT-PROMPT.md` |
-| 新 Claude 账号 | 已连接 GitHub，可推送；已给 v0.12.0 技能 zip，建议改为插件安装（见第六节） |
+| 新 Claude 账号 | 已连接 GitHub，可推送；已安装插件（v0.12.0），可通过校验 |
 
 ## 三、核心设计（已和用户确认，改动前先问）
 
@@ -100,10 +100,11 @@ AGENTS.md                      所有 Agent 共用的项目规则；CLAUDE.md、
 
 ## 八、其他待办
 
-- [ ] 新 Claude 账号：上传插件包或从仓库安装插件，删除旧技能；确认能否通过校验、能否自动更新
+- [ ] 新 Claude 账号：确认插件能否自动更新到 v0.12.1
 - [ ] 用户用真实需求试用，根据反馈继续精简
 - [ ] Grok Bot：复测单文件版（注意能否完整读取）、线框图、“出原型图”
 - [ ] 在真实 Web 项目的测试环境试跑 caffrey-test-runner，调整定位规则，验证上线结论（用户暂时没有可用地址）
+- [ ] 用户 Mac：Node.js v22 已装，Playwright 浏览器缓存有旧版本；演示脚本因缺 Playwright 1.63 对应的浏览器而阻塞，待用户运行 `npx playwright install chromium` 或设置 `PW_CHANNEL=chrome` 后重跑。公司内网不能用 Claude，内网测试用 Cursor 在本机运行
 - [ ] 用一份真实的已有 PRD 试用“检查 PRD”和“根据已有 PRD 出用例”
 - [ ] 实测 WorkBuddy、Cursor 的安装方式，修正 docs/install.md
 - [ ] 考虑建 GitHub Release，附两个技能 zip 和单文件版

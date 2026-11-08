@@ -9,6 +9,16 @@ const input = process.argv[2] || 'test-results/results.json';
 const outDir = process.argv[3] || path.dirname(input);
 const report = JSON.parse(fs.readFileSync(input, 'utf-8'));
 
+function envProblem(err) {
+  if (/Executable doesn't exist|browserType\.launch|Failed to launch|Chromium distribution .* is not found/.test(err)) {
+    return '环境问题：浏览器无法启动。运行 npx playwright install chromium，或设置 PW_CHANNEL=chrome 使用本机 Chrome';
+  }
+  const v = err.match(/缺少环境变量 (\w+)/);
+  if (v) return `环境问题：缺少环境变量 ${v[1]}`;
+  if (/net::ERR_|ECONNREFUSED|ENOTFOUND|ERR_NAME_NOT_RESOLVED/.test(err)) return '环境问题：被测地址无法访问';
+  return '';
+}
+
 const rows = [];
 (function walk(suite) {
   for (const spec of suite.specs || []) {
@@ -23,13 +33,16 @@ const rows = [];
       const step = (r.steps || []).find((s) => s.error);
       const setupFailed = step && step.title === 'setup';
       if (setupFailed) result = '阻塞';
+      // 环境问题（浏览器、环境变量、地址不可达）没有真正执行用例，记为阻塞，不算缺陷
+      const envIssue = result !== '通过' && envProblem(err);
+      if (envIssue) result = '阻塞';
       const shot = (r.attachments || []).find((a) => a.name === 'screenshot' && a.path);
       rows.push({
         id, title: rest.join(' '),
         feature: tags.find((x) => /^F-|^M\d+-F-/.test(x)) || '',
         priority: tags.find((x) => /^P\d$/.test(x)) || '',
         result,
-        actual: result === '通过' ? '—' : err.replace(/\u001b\[[0-9;]*m/g, '').split('\n').filter(Boolean).slice(0, 4).join('；'),
+        actual: result === '通过' ? '—' : envIssue || err.replace(/\u001b\[[0-9;]*m/g, '').split('\n').filter(Boolean).slice(0, 4).join('；'),
         failedAt: step ? step.title : '',
         evidence: shot ? path.relative(outDir, shot.path) : '',
       });

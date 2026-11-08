@@ -17,6 +17,8 @@ export default defineConfig({
   workers: 1,
   reporter: [['list'], ['html', { open: 'never' }], ['json', { outputFile: 'test-results/results.json' }]],
   use: {
+    // 设 PW_CHANNEL=chrome 时用本机已装的 Chrome，不用下载浏览器，适合内网
+    channel: process.env.PW_CHANNEL || undefined,
     screenshot: 'on',                   // 每条用例都截图，失败时额外保留 trace
     trace: 'retain-on-failure',
     viewport: { width: 1280, height: 900 },
